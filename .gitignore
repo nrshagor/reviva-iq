@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Odoo
+odoo_data/
+postgres_data/
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Environment
+.env
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
