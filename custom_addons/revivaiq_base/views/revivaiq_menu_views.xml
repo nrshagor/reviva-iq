@@ -16,75 +16,56 @@
         <field name="arch" type="xml">
             <form string="RevivaIQ Dashboard" create="0" delete="0">
                 <header>
-                    <button name="action_run_dead_stock_analysis"
-                            string="Run Dead Stock"
-                            type="object"
-                            class="btn-primary"/>
-
-                    <button name="action_run_customer_recovery_analysis"
-                            string="Run Customer Recovery"
-                            type="object"
-                            class="btn-primary"/>
-
-                    <button name="action_generate_analytics_snapshot"
-                            string="Generate Snapshot"
-                            type="object"
-                            class="btn-secondary"/>
+                    <button name="action_run_dead_stock_analysis" string="Run Dead Stock" type="object" class="btn-primary"/>
+                    <button name="action_run_customer_recovery_analysis" string="Run Customer Recovery" type="object" class="btn-primary"/>
+                    <button name="action_generate_analytics_snapshot" string="Generate Snapshot" type="object" class="btn-secondary"/>
                 </header>
 
-                <sheet>
+                <sheet class="o_form_sheet_full_width">
                     <field name="currency_id" invisible="1"/>
 
                     <div class="oe_title">
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
+                        <h1><field name="name" readonly="1"/></h1>
                         <p class="text-muted">
                             Revenue recovery summary for dead stock, inactive customers, and analytics snapshots.
                         </p>
                     </div>
 
-                    <group string="Dead Stock Summary" col="4">
-                        <field name="dead_stock_days_threshold" readonly="1"/>
-                        <field name="dead_stock_count" readonly="1"/>
-                        <field name="dead_stock_total_quantity" readonly="1"/>
-                        <field name="dead_stock_total_sold_quantity" readonly="1"/>
-                        <field name="dead_stock_total_risk_value" readonly="1"/>
-                        <field name="last_dead_stock_run" readonly="1"/>
-                        <field name="last_dead_stock_created_count" readonly="1"/>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12">
+                            <group string="Dead Stock Summary">
+                                <field name="dead_stock_days_threshold" readonly="1"/>
+                                <field name="dead_stock_count" readonly="1"/>
+                                <field name="dead_stock_total_quantity" readonly="1"/>
+                                <field name="dead_stock_total_sold_quantity" readonly="1"/>
+                                <field name="dead_stock_total_risk_value" readonly="1"/>
+                                <field name="last_dead_stock_run" readonly="1"/>
+                                <button name="action_open_dead_stock" string="View Dead Stock Details" type="object" class="btn-secondary"/>
+                            </group>
+                        </div>
 
-                        <button name="action_open_dead_stock"
-                                string="View Dead Stock Details"
-                                type="object"
-                                class="btn-secondary"/>
-                    </group>
+                        <div class="col-lg-4 col-md-12">
+                            <group string="Customer Recovery Summary">
+                                <field name="customer_inactivity_days_threshold" readonly="1"/>
+                                <field name="inactive_customer_count" readonly="1"/>
+                                <field name="high_score_customer_count" readonly="1"/>
+                                <field name="customer_recovery_value" readonly="1"/>
+                                <field name="last_customer_recovery_run" readonly="1"/>
+                                <button name="action_open_customer_insights" string="View Customer Insights" type="object" class="btn-secondary"/>
+                            </group>
+                        </div>
 
-                    <group string="Customer Recovery Summary" col="4">
-                        <field name="customer_inactivity_days_threshold" readonly="1"/>
-                        <field name="inactive_customer_count" readonly="1"/>
-                        <field name="high_score_customer_count" readonly="1"/>
-                        <field name="customer_recovery_value" readonly="1"/>
-                        <field name="last_customer_recovery_run" readonly="1"/>
-                        <field name="last_customer_recovery_created_count" readonly="1"/>
-
-                        <button name="action_open_customer_insights"
-                                string="View Customer Insights"
-                                type="object"
-                                class="btn-secondary"/>
-                    </group>
-
-                    <group string="Analytics Snapshot Summary" col="4">
-                        <field name="latest_snapshot_count" readonly="1"/>
-                        <field name="latest_total_revenue_risk" readonly="1"/>
-                        <field name="last_snapshot_run" readonly="1"/>
-                        <field name="last_snapshot_dead_stock_count" readonly="1"/>
-                        <field name="last_snapshot_customer_recovery_count" readonly="1"/>
-
-                        <button name="action_open_analytics_snapshots"
-                                string="View Snapshot History"
-                                type="object"
-                                class="btn-secondary"/>
-                    </group>
+                        <div class="col-lg-4 col-md-12">
+                            <group string="Analytics Snapshot Summary">
+                                <field name="latest_snapshot_count" readonly="1"/>
+                                <field name="latest_total_revenue_risk" readonly="1"/>
+                                <field name="last_snapshot_run" readonly="1"/>
+                                <field name="last_snapshot_dead_stock_count" readonly="1"/>
+                                <field name="last_snapshot_customer_recovery_count" readonly="1"/>
+                                <button name="action_open_analytics_snapshots" string="View Snapshot History" type="object" class="btn-secondary"/>
+                            </group>
+                        </div>
+                    </div>
                 </sheet>
             </form>
         </field>
@@ -130,15 +111,4 @@
               parent="menu_revivaiq_intelligence"
               action="action_revivaiq_analytics_snapshot"
               sequence="30"/>
-
-    <menuitem id="menu_revivaiq_dead_stock_settings"
-              name="Dead Stock Settings"
-              parent="menu_revivaiq_intelligence"
-              action="action_revivaiq_dashboard"
-              sequence="11"/>
-    <menuitem id="menu_revivaiq_dead_stock_settings"
-              name="Dead Stock Settings"
-              parent="menu_revivaiq_intelligence"
-              action="action_revivaiq_dashboard"
-              sequence="11"/>
 </odoo>
