@@ -1,0 +1,79 @@
+<odoo>
+    <record id="view_revivaiq_customer_insight_list" model="ir.ui.view">
+        <field name="name">revivaiq.customer.insight.list</field>
+        <field name="model">revivaiq.customer.insight</field>
+        <field name="arch" type="xml">
+            <list string="Customer Insights">
+                <field name="partner_id"/>
+                <field name="total_order_count"/>
+                <field name="total_revenue"/>
+                <field name="last_order_date"/>
+                <field name="days_inactive"/>
+                <field name="customer_status"/>
+                <field name="recovery_score"/>
+                <field name="recovery_stage"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_customer_insight_form" model="ir.ui.view">
+        <field name="name">revivaiq.customer.insight.form</field>
+        <field name="model">revivaiq.customer.insight</field>
+        <field name="arch" type="xml">
+            <form string="Customer Insight">
+                <sheet>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="company_id"/>
+                        <field name="customer_status"/>
+                        <field name="recovery_stage"/>
+                    </group>
+
+                    <group>
+                        <field name="total_order_count"/>
+                        <field name="total_revenue"/>
+                        <field name="last_order_date"/>
+                        <field name="days_inactive"/>
+                    </group>
+
+                    <group>
+                        <field name="recovery_score"/>
+                        <field name="currency_id"/>
+                    </group>
+
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_customer_insight_search" model="ir.ui.view">
+        <field name="name">revivaiq.customer.insight.search</field>
+        <field name="model">revivaiq.customer.insight</field>
+        <field name="arch" type="xml">
+            <search string="Search Customer Insights">
+                <field name="partner_id"/>
+                <field name="customer_status"/>
+                <field name="recovery_stage"/>
+
+                <filter string="At Risk" name="at_risk" domain="[('customer_status', '=', 'at_risk')]"/>
+                <filter string="Inactive" name="inactive" domain="[('customer_status', '=', 'inactive')]"/>
+                <filter string="Lost" name="lost" domain="[('customer_status', '=', 'lost')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Customer Status" name="group_customer_status" context="{'group_by': 'customer_status'}"/>
+                    <filter string="Recovery Stage" name="group_recovery_stage" context="{'group_by': 'recovery_stage'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_customer_insight" model="ir.actions.act_window">
+        <field name="name">Customer Insights</field>
+        <field name="res_model">revivaiq.customer.insight</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_revivaiq_customer_insight_search"/>
+    </record>
+</odoo>

@@ -31,6 +31,7 @@
         <field name="target">current</field>
     </record>
 
+    <!-- Main App Menu -->
     <menuitem
         id="menu_revivaiq_root"
         name="RevivaIQ"
@@ -38,11 +39,44 @@
         web_icon="revivaiq_base,static/description/icon.png"
     />
 
+    <!-- Dashboard -->
     <menuitem
         id="menu_revivaiq_dashboard"
-        name="Overview"
+        name="Dashboard"
         parent="menu_revivaiq_root"
         action="action_revivaiq_dashboard"
         sequence="10"
+    />
+
+    <!-- Intelligence -->
+    <menuitem
+        id="menu_revivaiq_intelligence"
+        name="Intelligence"
+        parent="menu_revivaiq_root"
+        sequence="20"
+    />
+
+    <menuitem
+        id="menu_revivaiq_dead_stock"
+        name="Dead Stock"
+        parent="menu_revivaiq_intelligence"
+        action="action_revivaiq_dead_stock"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_revivaiq_customer_insight"
+        name="Customer Insights"
+        parent="menu_revivaiq_intelligence"
+        action="action_revivaiq_customer_insight"
+        sequence="20"
+    />
+
+    <menuitem
+        id="menu_revivaiq_analytics_snapshot"
+        name="Analytics Snapshots"
+        parent="menu_revivaiq_intelligence"
+        action="action_revivaiq_analytics_snapshot"
+        sequence="30"
     />
 </odoo>
