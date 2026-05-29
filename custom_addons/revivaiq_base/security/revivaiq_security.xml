@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="group_revivaiq_user" model="res.groups">
+        <field name="name">RevivaIQ User</field>
+    </record>
+
+    <record id="group_revivaiq_manager" model="res.groups">
+        <field name="name">RevivaIQ Manager</field>
+        <field name="implied_ids" eval="[(4, ref('group_revivaiq_user'))]"/>
+    </record>
+</odoo>

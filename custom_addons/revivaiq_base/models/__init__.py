@@ -1,0 +1,1 @@
+from . import revivaiq_dashboard

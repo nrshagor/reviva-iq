@@ -16,7 +16,11 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
         "sale_management",
         "stock"
     ],
-    "data": [],
+    "data": [
+    "security/revivaiq_security.xml",
+    "security/ir.model.access.csv",
+    "views/revivaiq_menu_views.xml",
+    ],
     "demo": [],
     "installable": True,
     "application": True,

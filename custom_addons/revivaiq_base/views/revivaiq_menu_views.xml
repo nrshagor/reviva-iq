@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_revivaiq_dashboard_list" model="ir.ui.view">
+        <field name="name">revivaiq.dashboard.list</field>
+        <field name="model">revivaiq.dashboard</field>
+        <field name="arch" type="xml">
+            <list string="RevivaIQ Overview">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_dashboard_form" model="ir.ui.view">
+        <field name="name">revivaiq.dashboard.form</field>
+        <field name="model">revivaiq.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="RevivaIQ Overview">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_dashboard" model="ir.actions.act_window">
+        <field name="name">RevivaIQ Overview</field>
+        <field name="res_model">revivaiq.dashboard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem
+        id="menu_revivaiq_root"
+        name="RevivaIQ"
+        sequence="10"
+        web_icon="revivaiq_base,static/description/icon.png"
+    />
+
+    <menuitem
+        id="menu_revivaiq_dashboard"
+        name="Overview"
+        parent="menu_revivaiq_root"
+        action="action_revivaiq_dashboard"
+        sequence="10"
+    />
+</odoo>
