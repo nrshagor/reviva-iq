@@ -1,0 +1,130 @@
+<odoo>
+    <!-- Demo Products -->
+    <record id="product_revivaiq_demo_wireless_mouse" model="product.product">
+        <field name="name">RevivaIQ Demo Wireless Mouse</field>
+        <field name="list_price">25.00</field>
+        <field name="standard_price">12.00</field>
+    </record>
+
+    <record id="product_revivaiq_demo_usb_keyboard" model="product.product">
+        <field name="name">RevivaIQ Demo USB Keyboard</field>
+        <field name="list_price">40.00</field>
+        <field name="standard_price">20.00</field>
+    </record>
+
+    <record id="product_revivaiq_demo_office_chair" model="product.product">
+        <field name="name">RevivaIQ Demo Office Chair</field>
+        <field name="list_price">180.00</field>
+        <field name="standard_price">95.00</field>
+    </record>
+
+    <!-- Demo Customers -->
+    <record id="partner_revivaiq_demo_customer_alpha" model="res.partner">
+        <field name="name">RevivaIQ Demo Customer Alpha</field>
+        <field name="customer_rank">1</field>
+        <field name="email">alpha.customer@example.com</field>
+    </record>
+
+    <record id="partner_revivaiq_demo_customer_beta" model="res.partner">
+        <field name="name">RevivaIQ Demo Customer Beta</field>
+        <field name="customer_rank">1</field>
+        <field name="email">beta.customer@example.com</field>
+    </record>
+
+    <record id="partner_revivaiq_demo_customer_gamma" model="res.partner">
+        <field name="name">RevivaIQ Demo Customer Gamma</field>
+        <field name="customer_rank">1</field>
+        <field name="email">gamma.customer@example.com</field>
+    </record>
+
+    <!-- Dead Stock Demo Records -->
+    <record id="dead_stock_demo_wireless_mouse" model="revivaiq.dead.stock">
+        <field name="product_id" ref="product_revivaiq_demo_wireless_mouse"/>
+        <field name="quantity_on_hand">120</field>
+        <field name="quantity_sold">4</field>
+        <field name="last_sale_date">2026-03-10</field>
+        <field name="days_without_sale">80</field>
+        <field name="inventory_value">1440.00</field>
+        <field name="risk_level">high</field>
+        <field name="risk_score">82</field>
+        <field name="state">active</field>
+        <field name="note">High stock quantity with low recent sales movement.</field>
+    </record>
+
+    <record id="dead_stock_demo_usb_keyboard" model="revivaiq.dead.stock">
+        <field name="product_id" ref="product_revivaiq_demo_usb_keyboard"/>
+        <field name="quantity_on_hand">75</field>
+        <field name="quantity_sold">2</field>
+        <field name="last_sale_date">2026-02-15</field>
+        <field name="days_without_sale">104</field>
+        <field name="inventory_value">1500.00</field>
+        <field name="risk_level">critical</field>
+        <field name="risk_score">91</field>
+        <field name="state">active</field>
+        <field name="note">Critical dead stock candidate for clearance campaign.</field>
+    </record>
+
+    <record id="dead_stock_demo_office_chair" model="revivaiq.dead.stock">
+        <field name="product_id" ref="product_revivaiq_demo_office_chair"/>
+        <field name="quantity_on_hand">30</field>
+        <field name="quantity_sold">8</field>
+        <field name="last_sale_date">2026-04-20</field>
+        <field name="days_without_sale">39</field>
+        <field name="inventory_value">2850.00</field>
+        <field name="risk_level">medium</field>
+        <field name="risk_score">58</field>
+        <field name="state">reviewed</field>
+        <field name="note">Moderate risk item. Review pricing and bundle options.</field>
+    </record>
+
+    <!-- Customer Insight Demo Records -->
+    <record id="customer_insight_demo_alpha" model="revivaiq.customer.insight">
+        <field name="partner_id" ref="partner_revivaiq_demo_customer_alpha"/>
+        <field name="total_order_count">12</field>
+        <field name="total_revenue">3200.00</field>
+        <field name="last_order_date">2026-02-01</field>
+        <field name="days_inactive">118</field>
+        <field name="recovery_score">87</field>
+        <field name="customer_status">inactive</field>
+        <field name="recovery_stage">review</field>
+        <field name="note">High value inactive customer. Recommended for recovery campaign.</field>
+    </record>
+
+    <record id="customer_insight_demo_beta" model="revivaiq.customer.insight">
+        <field name="partner_id" ref="partner_revivaiq_demo_customer_beta"/>
+        <field name="total_order_count">5</field>
+        <field name="total_revenue">950.00</field>
+        <field name="last_order_date">2026-03-18</field>
+        <field name="days_inactive">72</field>
+        <field name="recovery_score">64</field>
+        <field name="customer_status">at_risk</field>
+        <field name="recovery_stage">contacted</field>
+        <field name="note">Customer contacted for retention offer.</field>
+    </record>
+
+    <record id="customer_insight_demo_gamma" model="revivaiq.customer.insight">
+        <field name="partner_id" ref="partner_revivaiq_demo_customer_gamma"/>
+        <field name="total_order_count">20</field>
+        <field name="total_revenue">7800.00</field>
+        <field name="last_order_date">2025-12-10</field>
+        <field name="days_inactive">170</field>
+        <field name="recovery_score">93</field>
+        <field name="customer_status">lost</field>
+        <field name="recovery_stage">new</field>
+        <field name="note">Lost high-value customer. Strong revenue recovery opportunity.</field>
+    </record>
+
+    <!-- Analytics Snapshot Demo Records -->
+    <record id="analytics_snapshot_demo_may" model="revivaiq.analytics.snapshot">
+        <field name="name">RevivaIQ Demo Snapshot - May 2026</field>
+        <field name="snapshot_date">2026-05-29</field>
+        <field name="snapshot_type">manual</field>
+        <field name="dead_stock_count">3</field>
+        <field name="dead_stock_value">5790.00</field>
+        <field name="inactive_customer_count">3</field>
+        <field name="recovery_opportunity_value">11950.00</field>
+        <field name="total_revenue_risk">17740.00</field>
+        <field name="state">confirmed</field>
+        <field name="note">Demo snapshot for RevivaIQ marketplace preview.</field>
+    </record>
+</odoo>

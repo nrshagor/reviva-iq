@@ -23,6 +23,7 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
         "views/dead_stock_views.xml",
         "views/customer_insight_views.xml",
         "views/analytics_snapshot_views.xml",
+        "data/demo_data.xml",
     ],
     "demo": [],
     "installable": True,
