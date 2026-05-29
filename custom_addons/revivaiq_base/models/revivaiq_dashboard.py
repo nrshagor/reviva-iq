@@ -12,20 +12,17 @@ class RevivaIQDashboard(models.Model):
         string="Dead Stock Threshold (Days)",
         default=60,
         required=True,
-        help="Products with no confirmed sale after this number of days will be considered dead stock candidates.",
     )
 
     dead_stock_max_batch_limit = fields.Integer(
         string="Maximum Product Batch Limit",
         default=500,
         required=True,
-        help="Maximum number of products processed in one analytics run.",
     )
 
     dead_stock_min_quantity = fields.Float(
         string="Minimum Stock Quantity",
         default=1.0,
-        help="Only products with stock quantity above this value will be checked for dead stock analysis.",
     )
 
     last_dead_stock_run = fields.Datetime(
@@ -38,44 +35,53 @@ class RevivaIQDashboard(models.Model):
         readonly=True,
     )
 
+    customer_inactivity_days_threshold = fields.Integer(
+        string="Customer Inactivity Threshold (Days)",
+        default=90,
+        required=True,
+    )
+
+    customer_batch_limit = fields.Integer(
+        string="Maximum Customer Batch Limit",
+        default=500,
+        required=True,
+    )
+
     @api.constrains("dead_stock_days_threshold")
     def _validate_dead_stock_threshold(self):
         for record in self:
             if record.dead_stock_days_threshold < 7:
-                raise ValidationError(
-                    "Dead stock threshold must be at least 7 days."
-                )
-
+                raise ValidationError("Dead stock threshold must be at least 7 days.")
             if record.dead_stock_days_threshold > 365:
-                raise ValidationError(
-                    "Dead stock threshold cannot exceed 365 days."
-                )
+                raise ValidationError("Dead stock threshold cannot exceed 365 days.")
 
     @api.constrains("dead_stock_max_batch_limit")
     def _validate_batch_limit(self):
         for record in self:
             if record.dead_stock_max_batch_limit < 50:
-                raise ValidationError(
-                    "Batch limit must be at least 50."
-                )
-
+                raise ValidationError("Batch limit must be at least 50.")
             if record.dead_stock_max_batch_limit > 5000:
-                raise ValidationError(
-                    "Batch limit cannot exceed 5000."
-                )
-    
+                raise ValidationError("Batch limit cannot exceed 5000.")
+
     @api.constrains("dead_stock_min_quantity")
     def _validate_minimum_quantity(self):
         for record in self:
             if record.dead_stock_min_quantity < 0:
-                raise ValidationError(
-                    "Minimum stock quantity cannot be negative."
-                )
-
+                raise ValidationError("Minimum stock quantity cannot be negative.")
             if record.dead_stock_min_quantity > 100000:
-                raise ValidationError(
-                    "Minimum stock quantity is too large."
-                )
+                raise ValidationError("Minimum stock quantity is too large.")
+
+    @api.constrains("customer_inactivity_days_threshold", "customer_batch_limit")
+    def _check_customer_recovery_settings(self):
+        for record in self:
+            if record.customer_inactivity_days_threshold < 30:
+                raise ValidationError("Customer Inactivity Threshold must be at least 30 days.")
+            if record.customer_inactivity_days_threshold > 730:
+                raise ValidationError("Customer Inactivity Threshold cannot exceed 730 days.")
+            if record.customer_batch_limit < 50:
+                raise ValidationError("Customer Batch Limit must be at least 50.")
+            if record.customer_batch_limit > 5000:
+                raise ValidationError("Customer Batch Limit cannot exceed 5000.")
 
     def action_run_dead_stock_analysis(self):
         self.ensure_one()
@@ -98,4 +104,19 @@ class RevivaIQDashboard(models.Model):
                 "type": "success",
                 "sticky": False,
             },
+        }
+
+    def action_run_customer_recovery_analysis(self):
+        self.ensure_one()
+
+        from ..services.customer_recovery_service import CustomerRecoveryService
+
+        CustomerRecoveryService(self.env).run_customer_recovery_analysis(self)
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Customer Recovery Opportunities",
+            "res_model": "revivaiq.customer.insight",
+            "view_mode": "list,form",
+            "target": "current",
         }

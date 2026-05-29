@@ -38,6 +38,17 @@
                         <field name="last_dead_stock_run"/>
                         <field name="last_dead_stock_created_count"/>
                     </group>
+
+                    <group string="Customer Recovery Settings">
+                        <field name="customer_inactivity_days_threshold"/>
+                        <field name="customer_batch_limit"/>
+                    </group>
+
+                    <button
+                        name="action_run_customer_recovery_analysis"
+                        type="object"
+                        string="Run Customer Recovery Analysis"
+                        class="btn-primary"/>
                 </sheet>
             </form>
         </field>
