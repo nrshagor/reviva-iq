@@ -1,10 +1,14 @@
 <odoo>
     <!-- Demo Products -->
+
+
     <record id="product_revivaiq_demo_wireless_mouse" model="product.product">
         <field name="name">RevivaIQ Demo Wireless Mouse</field>
         <field name="list_price">25.00</field>
         <field name="standard_price">12.00</field>
     </record>
+
+
 
     <record id="product_revivaiq_demo_usb_keyboard" model="product.product">
         <field name="name">RevivaIQ Demo USB Keyboard</field>

@@ -14,10 +14,29 @@
         <field name="name">revivaiq.dashboard.form</field>
         <field name="model">revivaiq.dashboard</field>
         <field name="arch" type="xml">
-            <form string="RevivaIQ Overview">
+            <form string="RevivaIQ Dashboard">
+                <header>
+                    <button
+                        name="action_run_dead_stock_analysis"
+                        string="Run Dead Stock Analysis"
+                        type="object"
+                        class="btn-primary"
+                    />
+                </header>
+
                 <sheet>
-                    <group>
+                    <group string="RevivaIQ Overview">
                         <field name="name"/>
+                    </group>
+
+                    <group string="Dead Stock Settings">
+                        <field name="dead_stock_days_threshold"/>
+                        <field name="dead_stock_min_quantity"/>
+                    </group>
+
+                    <group string="Last Run Summary">
+                        <field name="last_dead_stock_run"/>
+                        <field name="last_dead_stock_created_count"/>
                     </group>
                 </sheet>
             </form>
@@ -25,10 +44,10 @@
     </record>
 
     <record id="action_revivaiq_dashboard" model="ir.actions.act_window">
-        <field name="name">RevivaIQ Overview</field>
+        <field name="name">RevivaIQ Dashboard</field>
         <field name="res_model">revivaiq.dashboard</field>
-        <field name="view_mode">list,form</field>
-        <field name="target">current</field>
+        <field name="view_mode">form,list</field>
+        <field name="res_id" ref="revivaiq_dashboard_default"/>
     </record>
 
     <!-- Main App Menu -->
