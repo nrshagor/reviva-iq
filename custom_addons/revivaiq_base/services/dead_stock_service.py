@@ -8,21 +8,22 @@ class RevivaIQDeadStockService(models.AbstractModel):
     _inherit = "revivaiq.analytics.service"
     _description = "RevivaIQ Dead Stock Analytics Service"
 
-
     def generate_dead_stock_analysis(self):
         dashboard = self.env["revivaiq.dashboard"].search([], limit=1)
 
         threshold_days = dashboard.dead_stock_days_threshold or 60
         minimum_quantity = dashboard.dead_stock_min_quantity or 1.0
+        batch_limit = dashboard.dead_stock_max_batch_limit or 500
 
         today = fields.Date.today()
         cutoff_date = today - timedelta(days=threshold_days)
 
-        batch_limit = dashboard.dead_stock_max_batch_limit or 500
-
         products = self._search_limited(
             "product.product",
-            domain=[("sale_ok", "=", True)],
+            domain=[
+                ("sale_ok", "=", True),
+                ("company_id", "in", [False, self.env.company.id]),
+            ],
             limit=batch_limit,
             order="id desc",
         )
@@ -45,7 +46,8 @@ class RevivaIQDeadStockService(models.AbstractModel):
                 ("product_id", "in", product_ids),
                 ("state", "!=", "resolved"),
                 ("company_id", "=", self.env.company.id),
-            ]
+            ],
+            limit=batch_limit,
         )
 
         existing_product_ids = set(existing_records.mapped("product_id").ids)
@@ -57,6 +59,7 @@ class RevivaIQDeadStockService(models.AbstractModel):
                 ("company_id", "=", self.env.company.id),
             ],
             order="create_date desc",
+            limit=batch_limit * 10,
         )
 
         last_sale_by_product = {}
@@ -80,9 +83,7 @@ class RevivaIQDeadStockService(models.AbstractModel):
             if last_sale_date and last_sale_date > cutoff_date:
                 continue
 
-            risk_level, risk_score = self._calculate_dead_stock_risk(
-                days_without_sale
-            )
+            risk_level, risk_score = self._calculate_dead_stock_risk(days_without_sale)
 
             create_values.append(
                 {

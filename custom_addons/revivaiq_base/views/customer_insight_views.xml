@@ -3,10 +3,11 @@
         <field name="name">revivaiq.customer.insight.list</field>
         <field name="model">revivaiq.customer.insight</field>
         <field name="arch" type="xml">
-            <list string="Customer Insights">
+            <list string="Customer Insights" decoration-danger="customer_status == 'lost'" decoration-warning="customer_status in ('inactive', 'at_risk')">
                 <field name="partner_id"/>
                 <field name="total_order_count"/>
-                <field name="total_revenue"/>
+                <field name="total_revenue" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="last_order_date"/>
                 <field name="days_inactive"/>
                 <field name="customer_status"/>
@@ -22,26 +23,26 @@
         <field name="arch" type="xml">
             <form string="Customer Insight">
                 <sheet>
-                    <group>
+                    <group string="Customer">
                         <field name="partner_id"/>
-                        <field name="company_id"/>
+                        <field name="company_id" readonly="1"/>
                         <field name="customer_status"/>
                         <field name="recovery_stage"/>
                     </group>
 
-                    <group>
+                    <group string="Sales History" col="2">
                         <field name="total_order_count"/>
-                        <field name="total_revenue"/>
+                        <field name="total_revenue" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
                         <field name="last_order_date"/>
                         <field name="days_inactive"/>
                     </group>
 
-                    <group>
+                    <group string="Recovery Score">
                         <field name="recovery_score"/>
-                        <field name="currency_id"/>
                     </group>
 
-                    <group>
+                    <group string="Note">
                         <field name="note"/>
                     </group>
                 </sheet>
@@ -58,9 +59,12 @@
                 <field name="customer_status"/>
                 <field name="recovery_stage"/>
 
+                <filter string="High Score" name="high_score" domain="[('recovery_score', '&gt;=', 80)]"/>
                 <filter string="At Risk" name="at_risk" domain="[('customer_status', '=', 'at_risk')]"/>
                 <filter string="Inactive" name="inactive" domain="[('customer_status', '=', 'inactive')]"/>
                 <filter string="Lost" name="lost" domain="[('customer_status', '=', 'lost')]"/>
+                <filter string="New Recovery" name="new_recovery" domain="[('recovery_stage', '=', 'new')]"/>
+                <filter string="Review" name="review" domain="[('recovery_stage', '=', 'review')]"/>
 
                 <group expand="0" string="Group By">
                     <filter string="Customer Status" name="group_customer_status" context="{'group_by': 'customer_status'}"/>

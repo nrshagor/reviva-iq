@@ -14,41 +14,77 @@
         <field name="name">revivaiq.dashboard.form</field>
         <field name="model">revivaiq.dashboard</field>
         <field name="arch" type="xml">
-            <form string="RevivaIQ Dashboard">
+            <form string="RevivaIQ Dashboard" create="0" delete="0">
                 <header>
-                    <button
-                        name="action_run_dead_stock_analysis"
-                        string="Run Dead Stock Analysis"
-                        type="object"
-                        class="btn-primary"
-                    />
+                    <button name="action_run_dead_stock_analysis"
+                            string="Run Dead Stock"
+                            type="object"
+                            class="btn-primary"/>
+
+                    <button name="action_run_customer_recovery_analysis"
+                            string="Run Customer Recovery"
+                            type="object"
+                            class="btn-primary"/>
+
+                    <button name="action_generate_analytics_snapshot"
+                            string="Generate Snapshot"
+                            type="object"
+                            class="btn-secondary"/>
                 </header>
 
                 <sheet>
-                    <group string="RevivaIQ Overview">
-                        <field name="name"/>
+                    <field name="currency_id" invisible="1"/>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <p class="text-muted">
+                            Revenue recovery summary for dead stock, inactive customers, and analytics snapshots.
+                        </p>
+                    </div>
+
+                    <group string="Dead Stock Summary" col="4">
+                        <field name="dead_stock_days_threshold" readonly="1"/>
+                        <field name="dead_stock_count" readonly="1"/>
+                        <field name="dead_stock_total_quantity" readonly="1"/>
+                        <field name="dead_stock_total_sold_quantity" readonly="1"/>
+                        <field name="dead_stock_total_risk_value" readonly="1"/>
+                        <field name="last_dead_stock_run" readonly="1"/>
+                        <field name="last_dead_stock_created_count" readonly="1"/>
+
+                        <button name="action_open_dead_stock"
+                                string="View Dead Stock Details"
+                                type="object"
+                                class="btn-secondary"/>
                     </group>
 
-                    <group string="Dead Stock Settings">
-                        <field name="dead_stock_days_threshold"/>
-                        <field name="dead_stock_min_quantity"/>
+                    <group string="Customer Recovery Summary" col="4">
+                        <field name="customer_inactivity_days_threshold" readonly="1"/>
+                        <field name="inactive_customer_count" readonly="1"/>
+                        <field name="high_score_customer_count" readonly="1"/>
+                        <field name="customer_recovery_value" readonly="1"/>
+                        <field name="last_customer_recovery_run" readonly="1"/>
+                        <field name="last_customer_recovery_created_count" readonly="1"/>
+
+                        <button name="action_open_customer_insights"
+                                string="View Customer Insights"
+                                type="object"
+                                class="btn-secondary"/>
                     </group>
 
-                    <group string="Last Run Summary">
-                        <field name="last_dead_stock_run"/>
-                        <field name="last_dead_stock_created_count"/>
-                    </group>
+                    <group string="Analytics Snapshot Summary" col="4">
+                        <field name="latest_snapshot_count" readonly="1"/>
+                        <field name="latest_total_revenue_risk" readonly="1"/>
+                        <field name="last_snapshot_run" readonly="1"/>
+                        <field name="last_snapshot_dead_stock_count" readonly="1"/>
+                        <field name="last_snapshot_customer_recovery_count" readonly="1"/>
 
-                    <group string="Customer Recovery Settings">
-                        <field name="customer_inactivity_days_threshold"/>
-                        <field name="customer_batch_limit"/>
+                        <button name="action_open_analytics_snapshots"
+                                string="View Snapshot History"
+                                type="object"
+                                class="btn-secondary"/>
                     </group>
-
-                    <button
-                        name="action_run_customer_recovery_analysis"
-                        type="object"
-                        string="Run Customer Recovery Analysis"
-                        class="btn-primary"/>
                 </sheet>
             </form>
         </field>
@@ -61,52 +97,48 @@
         <field name="res_id" ref="revivaiq_dashboard_default"/>
     </record>
 
-    <!-- Main App Menu -->
-    <menuitem
-        id="menu_revivaiq_root"
-        name="RevivaIQ"
-        sequence="10"
-        web_icon="revivaiq_base,static/description/icon.png"
-    />
+    <menuitem id="menu_revivaiq_root"
+              name="RevivaIQ"
+              sequence="10"
+              web_icon="revivaiq_base,static/description/icon.png"/>
 
-    <!-- Dashboard -->
-    <menuitem
-        id="menu_revivaiq_dashboard"
-        name="Dashboard"
-        parent="menu_revivaiq_root"
-        action="action_revivaiq_dashboard"
-        sequence="10"
-    />
+    <menuitem id="menu_revivaiq_dashboard"
+              name="Dashboard"
+              parent="menu_revivaiq_root"
+              action="action_revivaiq_dashboard"
+              sequence="10"/>
 
-    <!-- Intelligence -->
-    <menuitem
-        id="menu_revivaiq_intelligence"
-        name="Intelligence"
-        parent="menu_revivaiq_root"
-        sequence="20"
-    />
+    <menuitem id="menu_revivaiq_intelligence"
+              name="Intelligence"
+              parent="menu_revivaiq_root"
+              sequence="20"/>
 
-    <menuitem
-        id="menu_revivaiq_dead_stock"
-        name="Dead Stock"
-        parent="menu_revivaiq_intelligence"
-        action="action_revivaiq_dead_stock"
-        sequence="10"
-    />
+    <menuitem id="menu_revivaiq_dead_stock"
+              name="Dead Stock"
+              parent="menu_revivaiq_intelligence"
+              action="action_revivaiq_dead_stock"
+              sequence="10"/>
 
-    <menuitem
-        id="menu_revivaiq_customer_insight"
-        name="Customer Insights"
-        parent="menu_revivaiq_intelligence"
-        action="action_revivaiq_customer_insight"
-        sequence="20"
-    />
+    <menuitem id="menu_revivaiq_customer_insight"
+              name="Customer Insights"
+              parent="menu_revivaiq_intelligence"
+              action="action_revivaiq_customer_insight"
+              sequence="20"/>
 
-    <menuitem
-        id="menu_revivaiq_analytics_snapshot"
-        name="Analytics Snapshots"
-        parent="menu_revivaiq_intelligence"
-        action="action_revivaiq_analytics_snapshot"
-        sequence="30"
-    />
+    <menuitem id="menu_revivaiq_analytics_snapshot"
+              name="Analytics Snapshots"
+              parent="menu_revivaiq_intelligence"
+              action="action_revivaiq_analytics_snapshot"
+              sequence="30"/>
+
+    <menuitem id="menu_revivaiq_dead_stock_settings"
+              name="Dead Stock Settings"
+              parent="menu_revivaiq_intelligence"
+              action="action_revivaiq_dashboard"
+              sequence="11"/>
+    <menuitem id="menu_revivaiq_dead_stock_settings"
+              name="Dead Stock Settings"
+              parent="menu_revivaiq_intelligence"
+              action="action_revivaiq_dashboard"
+              sequence="11"/>
 </odoo>

@@ -8,10 +8,11 @@
                 <field name="snapshot_date"/>
                 <field name="snapshot_type"/>
                 <field name="dead_stock_count"/>
-                <field name="dead_stock_value"/>
+                <field name="dead_stock_value" widget="monetary"/>
                 <field name="inactive_customer_count"/>
-                <field name="recovery_opportunity_value"/>
-                <field name="total_revenue_risk"/>
+                <field name="recovery_opportunity_value" widget="monetary"/>
+                <field name="total_revenue_risk" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="state"/>
             </list>
         </field>
@@ -23,30 +24,33 @@
         <field name="arch" type="xml">
             <form string="Analytics Snapshot">
                 <sheet>
-                    <group>
+                    <group string="Snapshot Info" col="2">
                         <field name="name"/>
                         <field name="snapshot_date"/>
-                        <field name="company_id"/>
+                        <field name="company_id" readonly="1"/>
                         <field name="snapshot_type"/>
                         <field name="state"/>
                     </group>
 
-                    <group string="Dead Stock">
+                    <group string="Dead Stock Summary" col="2">
                         <field name="dead_stock_count"/>
-                        <field name="dead_stock_value"/>
+                        <field name="dead_stock_value" widget="monetary"/>
                     </group>
 
-                    <group string="Customer Recovery">
+                    <group string="Customer Recovery Summary" col="2">
                         <field name="inactive_customer_count"/>
-                        <field name="recovery_opportunity_value"/>
+                        <field name="customer_recovery_count"/>
+                        <field name="high_score_customer_count"/>
+                        <field name="recovery_opportunity_value" widget="monetary"/>
                     </group>
 
-                    <group string="Revenue Risk">
-                        <field name="total_revenue_risk"/>
-                        <field name="currency_id"/>
+                    <group string="Revenue Risk" col="2">
+                        <field name="high_risk_dead_stock_count"/>
+                        <field name="total_revenue_risk" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
                     </group>
 
-                    <group>
+                    <group string="Note">
                         <field name="note"/>
                     </group>
                 </sheet>
@@ -65,7 +69,7 @@
                 <field name="state"/>
 
                 <filter string="Manual" name="manual" domain="[('snapshot_type', '=', 'manual')]"/>
-                <filter string="Scheduled" name="scheduled" domain="[('snapshot_type', '=', 'scheduled')]"/>
+                <filter string="System" name="system" domain="[('snapshot_type', '=', 'system')]"/>
                 <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
 
                 <group expand="0" string="Group By">

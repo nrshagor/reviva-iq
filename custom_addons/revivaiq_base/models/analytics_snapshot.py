@@ -6,13 +6,10 @@ class RevivaIQAnalyticsSnapshot(models.Model):
     _description = "RevivaIQ Analytics Snapshot"
     _order = "snapshot_date desc, id desc"
 
-    name = fields.Char(string="Snapshot Name", required=True)
-
-    snapshot_date = fields.Date(
-        string="Snapshot Date",
+    name = fields.Char(
+        string="Snapshot Name",
         required=True,
-        default=fields.Date.context_today,
-        index=True,
+        default="RevivaIQ Snapshot",
     )
 
     company_id = fields.Many2one(
@@ -23,43 +20,79 @@ class RevivaIQAnalyticsSnapshot(models.Model):
         index=True,
     )
 
-    dead_stock_count = fields.Integer(string="Dead Stock Items", default=0)
-    dead_stock_value = fields.Monetary(string="Dead Stock Value", default=0.0)
-
-    inactive_customer_count = fields.Integer(string="Inactive Customers", default=0)
-    recovery_opportunity_value = fields.Monetary(
-        string="Recovery Opportunity Value",
-        default=0.0,
-    )
-
-    total_revenue_risk = fields.Monetary(string="Total Revenue Risk", default=0.0)
-
     currency_id = fields.Many2one(
         "res.currency",
+        string="Currency",
         related="company_id.currency_id",
+        store=True,
         readonly=True,
+    )
+
+    snapshot_date = fields.Datetime(
+        string="Snapshot Date",
+        default=fields.Datetime.now,
+        required=True,
+        index=True,
     )
 
     snapshot_type = fields.Selection(
         [
             ("manual", "Manual"),
-            ("scheduled", "Scheduled"),
             ("system", "System"),
         ],
         string="Snapshot Type",
         default="manual",
-        index=True,
+        required=True,
+    )
+
+    dead_stock_count = fields.Integer(
+        string="Dead Stock Count",
+        readonly=True,
+    )
+
+    dead_stock_value = fields.Monetary(
+        string="Dead Stock Value",
+        readonly=True,
+    )
+
+    inactive_customer_count = fields.Integer(
+        string="Inactive Customers",
+        readonly=True,
+    )
+
+    recovery_opportunity_value = fields.Monetary(
+        string="Recovery Opportunity Value",
+        readonly=True,
+    )
+
+    total_revenue_risk = fields.Monetary(
+        string="Total Revenue Risk",
+        readonly=True,
+    )
+
+    customer_recovery_count = fields.Integer(
+        string="Customer Recovery Count",
+        readonly=True,
+    )
+
+    high_risk_dead_stock_count = fields.Integer(
+        string="High Risk Dead Stock",
+        readonly=True,
+    )
+
+    high_score_customer_count = fields.Integer(
+        string="High Score Customers",
+        readonly=True,
     )
 
     state = fields.Selection(
         [
             ("draft", "Draft"),
             ("confirmed", "Confirmed"),
-            ("archived", "Archived"),
         ],
         string="Status",
-        default="draft",
-        index=True,
+        default="confirmed",
+        required=True,
     )
 
-    note = fields.Text(string="Snapshot Note")
+    note = fields.Text(string="Note")

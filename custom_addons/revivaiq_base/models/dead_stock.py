@@ -62,3 +62,19 @@ class RevivaIQDeadStock(models.Model):
     )
 
     note = fields.Text(string="Internal Note")
+
+    def action_open_dead_stock_settings(self):
+        dashboard = self.env["revivaiq.dashboard"].search([], limit=1)
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Dead Stock Settings",
+            "res_model": "revivaiq.dashboard",
+            "res_id": dashboard.id,
+            "view_mode": "form",
+            "target": "current",
+        }
+
+    def action_run_dead_stock_analysis(self):
+        dashboard = self.env["revivaiq.dashboard"].search([], limit=1)
+        return dashboard.action_run_dead_stock_analysis()

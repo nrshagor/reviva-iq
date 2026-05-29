@@ -3,12 +3,13 @@
         <field name="name">revivaiq.dead.stock.list</field>
         <field name="model">revivaiq.dead.stock</field>
         <field name="arch" type="xml">
-            <list string="Dead Stock">
+            <list string="Dead Stock" decoration-danger="risk_level in ('high', 'critical')" decoration-warning="risk_level == 'medium'">
                 <field name="product_id"/>
                 <field name="quantity_on_hand"/>
                 <field name="quantity_sold"/>
                 <field name="days_without_sale"/>
-                <field name="inventory_value"/>
+                <field name="inventory_value" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
                 <field name="risk_level"/>
                 <field name="risk_score"/>
                 <field name="state"/>
@@ -22,27 +23,27 @@
         <field name="arch" type="xml">
             <form string="Dead Stock">
                 <sheet>
-                    <group>
+                    <group string="Product">
                         <field name="product_id"/>
-                        <field name="company_id"/>
+                        <field name="company_id" readonly="1"/>
                         <field name="state"/>
                     </group>
 
-                    <group>
+                    <group string="Inventory Movement" col="2">
                         <field name="quantity_on_hand"/>
                         <field name="quantity_sold"/>
                         <field name="last_sale_date"/>
                         <field name="days_without_sale"/>
                     </group>
 
-                    <group>
-                        <field name="inventory_value"/>
-                        <field name="currency_id"/>
+                    <group string="Risk Analysis" col="2">
+                        <field name="inventory_value" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
                         <field name="risk_level"/>
                         <field name="risk_score"/>
                     </group>
 
-                    <group>
+                    <group string="Internal Note">
                         <field name="note"/>
                     </group>
                 </sheet>
@@ -58,8 +59,11 @@
                 <field name="product_id"/>
                 <field name="risk_level"/>
                 <field name="state"/>
-                <filter string="High Risk" name="high_risk" domain="[('risk_level', 'in', ['high', 'critical'])]"/>
+
+                <filter string="High/Critical Risk" name="high_risk" domain="[('risk_level', 'in', ['high', 'critical'])]"/>
                 <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Reviewed" name="reviewed" domain="[('state', '=', 'reviewed')]"/>
+
                 <group expand="0" string="Group By">
                     <filter string="Risk Level" name="group_risk_level" context="{'group_by': 'risk_level'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
