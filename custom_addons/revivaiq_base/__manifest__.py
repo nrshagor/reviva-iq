@@ -19,12 +19,15 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
     "data": [
         "security/revivaiq_security.xml",
         "security/ir.model.access.csv",
+
         "data/dashboard_data.xml",
         "data/demo_data.xml",
-        "views/revivaiq_menu_views.xml",
+
+        "views/analysis_wizard_views.xml",
         "views/dead_stock_views.xml",
         "views/customer_insight_views.xml",
         "views/analytics_snapshot_views.xml",
+        "views/revivaiq_menu_views.xml",
     ],
     "demo": [],
     "installable": True,

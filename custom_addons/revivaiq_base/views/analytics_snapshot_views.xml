@@ -4,6 +4,14 @@
         <field name="model">revivaiq.analytics.snapshot</field>
         <field name="arch" type="xml">
             <list string="Analytics Snapshots">
+                <header>
+                    <button name="%(action_revivaiq_snapshot_generation_wizard)d"
+                            string="Generate Snapshot"
+                            type="action"
+                            class="btn-primary"
+                            display="always"/>
+                </header>
+
                 <field name="name"/>
                 <field name="snapshot_date"/>
                 <field name="snapshot_type"/>

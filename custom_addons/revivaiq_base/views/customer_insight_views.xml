@@ -4,6 +4,14 @@
         <field name="model">revivaiq.customer.insight</field>
         <field name="arch" type="xml">
             <list string="Customer Insights" decoration-danger="customer_status == 'lost'" decoration-warning="customer_status in ('inactive', 'at_risk')">
+                <header>
+                    <button name="%(action_revivaiq_customer_recovery_wizard)d"
+                            string="Run Customer Recovery"
+                            type="action"
+                            class="btn-primary"
+                            display="always"/>
+                </header>
+                
                 <field name="partner_id"/>
                 <field name="total_order_count"/>
                 <field name="total_revenue" widget="monetary"/>

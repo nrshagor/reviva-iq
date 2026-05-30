@@ -3,3 +3,6 @@ access_revivaiq_dashboard_user,access.revivaiq.dashboard.user,model_revivaiq_das
 access_revivaiq_dead_stock_user,access.revivaiq.dead.stock.user,model_revivaiq_dead_stock,base.group_user,1,1,1,1
 access_revivaiq_customer_insight_user,access.revivaiq.customer.insight.user,model_revivaiq_customer_insight,base.group_user,1,1,1,1
 access_revivaiq_analytics_snapshot_user,access.revivaiq.analytics.snapshot.user,model_revivaiq_analytics_snapshot,base.group_user,1,1,1,1
+access_revivaiq_dead_stock_analysis_wizard_user,access.revivaiq.dead.stock.analysis.wizard.user,model_revivaiq_dead_stock_analysis_wizard,base.group_user,1,1,1,1
+access_revivaiq_customer_recovery_wizard_user,access.revivaiq.customer.recovery.wizard.user,model_revivaiq_customer_recovery_wizard,base.group_user,1,1,1,1
+access_revivaiq_snapshot_generation_wizard_user,access.revivaiq.snapshot.generation.wizard.user,model_revivaiq_snapshot_generation_wizard,base.group_user,1,1,1,1
