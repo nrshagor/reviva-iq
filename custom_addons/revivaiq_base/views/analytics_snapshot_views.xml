@@ -3,7 +3,9 @@
         <field name="name">revivaiq.analytics.snapshot.list</field>
         <field name="model">revivaiq.analytics.snapshot</field>
         <field name="arch" type="xml">
-            <list string="Analytics Snapshots">
+            <list string="Analytics Snapshots"
+                  decoration-danger="total_revenue_risk &gt;= 10000"
+                  decoration-warning="total_revenue_risk &gt;= 5000 and total_revenue_risk &lt; 10000">
                 <header>
                     <button name="%(action_revivaiq_snapshot_generation_wizard)d"
                             string="Generate Snapshot"
@@ -82,24 +84,74 @@
                 <field name="snapshot_date"/>
                 <field name="snapshot_type"/>
                 <field name="state"/>
+                <field name="analysis_source"/>
 
-                <filter string="Manual" name="manual" domain="[('snapshot_type', '=', 'manual')]"/>
-                <filter string="System" name="system" domain="[('snapshot_type', '=', 'system')]"/>
-                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="High Revenue Risk"
+                        name="high_revenue_risk"
+                        domain="[('total_revenue_risk', '&gt;=', 10000)]"/>
+
+                <filter string="Medium Revenue Risk"
+                        name="medium_revenue_risk"
+                        domain="[('total_revenue_risk', '&gt;=', 5000), ('total_revenue_risk', '&lt;', 10000)]"/>
 
                 <separator/>
 
-                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
-                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
-                <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+                <filter string="Manual Snapshot"
+                        name="manual"
+                        domain="[('snapshot_type', '=', 'manual')]"/>
+
+                <filter string="System Snapshot"
+                        name="system"
+                        domain="[('snapshot_type', '=', 'system')]"/>
+
+                <filter string="Confirmed"
+                        name="confirmed"
+                        domain="[('state', '=', 'confirmed')]"/>
+
+                <separator/>
+
+                <filter string="Demo Data"
+                        name="source_demo"
+                        domain="[('analysis_source', '=', 'demo')]"/>
+
+                <filter string="Generated"
+                        name="source_generated"
+                        domain="[('analysis_source', '=', 'generated')]"/>
+
+                <filter string="Manual Source"
+                        name="source_manual"
+                        domain="[('analysis_source', '=', 'manual')]"/>
+
+                <filter string="Generated High Risk"
+                        name="generated_high_risk"
+                        domain="[('analysis_source', '=', 'generated'), ('total_revenue_risk', '&gt;=', 10000)]"/>
+
+                <separator/>
+
+                <filter string="Recently Generated"
+                        name="recently_generated"
+                        domain="[('analysis_run_date', '!=', False)]"/>
 
                 <group expand="0" string="Group By">
-                    <filter string="Snapshot Type" name="group_snapshot_type" context="{'group_by': 'snapshot_type'}"/>
-                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
-                    <filter string="Snapshot Date" name="group_snapshot_date" context="{'group_by': 'snapshot_date'}"/>
-                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
-                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
-                
+                    <filter string="Snapshot Type"
+                            name="group_snapshot_type"
+                            context="{'group_by': 'snapshot_type'}"/>
+
+                    <filter string="Status"
+                            name="group_state"
+                            context="{'group_by': 'state'}"/>
+
+                    <filter string="Snapshot Date"
+                            name="group_snapshot_date"
+                            context="{'group_by': 'snapshot_date'}"/>
+
+                    <filter string="Analysis Source"
+                            name="group_analysis_source"
+                            context="{'group_by': 'analysis_source'}"/>
+
+                    <filter string="Analysis Run Date"
+                            name="group_analysis_run_date"
+                            context="{'group_by': 'analysis_run_date'}"/>
                 </group>
             </search>
         </field>
