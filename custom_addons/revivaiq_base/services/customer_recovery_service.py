@@ -24,6 +24,7 @@ class CustomerRecoveryService:
 
         Insight = self.env["revivaiq.customer.insight"]
         created_count = 0
+        updated_count = 0
 
         for partner in partners:
             orders = self.env["sale.order"].search(
@@ -77,16 +78,22 @@ class CustomerRecoveryService:
                 "recovery_score": recovery_score,
                 "customer_status": customer_status,
                 "recovery_stage": recovery_stage,
+                "analysis_source": "generated",
+                "analysis_run_date": fields.Datetime.now(),
                 "note": "Inactive customer detected by RevivaIQ recovery analytics.",
             }
 
             if existing:
                 existing.write(vals)
+                updated_count += 1
             else:
                 Insight.create(vals)
                 created_count += 1
 
-        return created_count
+        return {
+            "created_records": created_count,
+            "updated_records": updated_count,
+        }
 
     def _get_customer_status(self, days_inactive, inactivity_days):
         if days_inactive >= inactivity_days * 2:

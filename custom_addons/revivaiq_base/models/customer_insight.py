@@ -23,6 +23,7 @@ class RevivaIQCustomerInsight(models.Model):
 
     total_order_count = fields.Integer(string="Total Orders")
     total_revenue = fields.Monetary(string="Total Revenue")
+
     currency_id = fields.Many2one(
         "res.currency",
         string="Currency",
@@ -35,6 +36,25 @@ class RevivaIQCustomerInsight(models.Model):
     days_inactive = fields.Integer(string="Days Inactive")
     recovery_score = fields.Integer(string="Recovery Score")
 
+    analysis_source = fields.Selection(
+        [
+            ("demo", "Demo Data"),
+            ("manual", "Manual"),
+            ("generated", "Generated"),
+        ],
+        string="Analysis Source",
+        default="generated",
+        required=True,
+        index=True,
+    )
+
+    analysis_run_date = fields.Datetime(
+        string="Analysis Run Date",
+        default=fields.Datetime.now,
+        readonly=True,
+        index=True,
+    )
+
     customer_status = fields.Selection(
         [
             ("active", "Active"),
@@ -45,6 +65,7 @@ class RevivaIQCustomerInsight(models.Model):
         string="Customer Status",
         default="inactive",
         required=True,
+        index=True,
     )
 
     recovery_stage = fields.Selection(
@@ -58,6 +79,7 @@ class RevivaIQCustomerInsight(models.Model):
         string="Recovery Stage",
         default="new",
         required=True,
+        index=True,
     )
 
     note = fields.Text(string="Note")

@@ -35,6 +35,7 @@ class RevivaIQDeadStockService(models.AbstractModel):
 
         DeadStock = self.env["revivaiq.dead.stock"]
         created_records = 0
+        updated_records = 0
 
         for product in valid_products:
             sale_line = self.env["sale.order.line"].search(
@@ -49,8 +50,10 @@ class RevivaIQDeadStockService(models.AbstractModel):
 
             if sale_line:
                 last_sale_date = sale_line.order_id.date_order.date()
+
                 if last_sale_date > cutoff_date:
                     continue
+
                 days_without_sale = (today - last_sale_date).days
             else:
                 last_sale_date = False
@@ -60,10 +63,13 @@ class RevivaIQDeadStockService(models.AbstractModel):
 
             if days_without_sale >= threshold_days * 2:
                 risk_level = "critical"
+                risk_score = 95
             elif days_without_sale >= threshold_days:
                 risk_level = "high"
+                risk_score = 80
             else:
                 risk_level = "medium"
+                risk_score = 55
 
             existing = DeadStock.search(
                 [
@@ -82,11 +88,16 @@ class RevivaIQDeadStockService(models.AbstractModel):
                 "days_without_sale": days_without_sale,
                 "inventory_value": inventory_value,
                 "risk_level": risk_level,
+                "risk_score": risk_score,
+                "state": "active",
+                "analysis_source": "generated",
+                "analysis_run_date": fields.Datetime.now(),
                 "note": "Dead stock candidate detected by RevivaIQ analytics.",
             }
 
             if existing:
                 existing.write(vals)
+                updated_records += 1
             else:
                 DeadStock.create(vals)
                 created_records += 1
@@ -94,4 +105,5 @@ class RevivaIQDeadStockService(models.AbstractModel):
         return {
             "success": True,
             "created_records": created_records,
+            "updated_records": updated_records,
         }

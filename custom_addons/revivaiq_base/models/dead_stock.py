@@ -29,10 +29,30 @@ class RevivaIQDeadStock(models.Model):
     days_without_sale = fields.Integer(string="Days Without Sale", default=0)
 
     inventory_value = fields.Monetary(string="Inventory Value", default=0.0)
+
     currency_id = fields.Many2one(
         "res.currency",
         related="company_id.currency_id",
         readonly=True,
+    )
+
+    analysis_source = fields.Selection(
+        [
+            ("demo", "Demo Data"),
+            ("manual", "Manual"),
+            ("generated", "Generated"),
+        ],
+        string="Analysis Source",
+        default="generated",
+        required=True,
+        index=True,
+    )
+
+    analysis_run_date = fields.Datetime(
+        string="Analysis Run Date",
+        default=fields.Datetime.now,
+        readonly=True,
+        index=True,
     )
 
     risk_level = fields.Selection(
@@ -64,7 +84,10 @@ class RevivaIQDeadStock(models.Model):
     note = fields.Text(string="Internal Note")
 
     def action_open_dead_stock_settings(self):
-        dashboard = self.env["revivaiq.dashboard"].search([], limit=1)
+        dashboard = self.env["revivaiq.dashboard"].search(
+            [("company_id", "=", self.env.company.id)],
+            limit=1,
+        )
 
         return {
             "type": "ir.actions.act_window",
@@ -76,5 +99,9 @@ class RevivaIQDeadStock(models.Model):
         }
 
     def action_run_dead_stock_analysis(self):
-        dashboard = self.env["revivaiq.dashboard"].search([], limit=1)
+        dashboard = self.env["revivaiq.dashboard"].search(
+            [("company_id", "=", self.env.company.id)],
+            limit=1,
+        )
+
         return dashboard.action_run_dead_stock_analysis()

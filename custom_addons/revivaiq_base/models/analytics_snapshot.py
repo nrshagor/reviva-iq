@@ -43,6 +43,26 @@ class RevivaIQAnalyticsSnapshot(models.Model):
         string="Snapshot Type",
         default="manual",
         required=True,
+        index=True,
+    )
+
+    analysis_source = fields.Selection(
+        [
+            ("demo", "Demo Data"),
+            ("manual", "Manual"),
+            ("generated", "Generated"),
+        ],
+        string="Analysis Source",
+        default="generated",
+        required=True,
+        index=True,
+    )
+
+    analysis_run_date = fields.Datetime(
+        string="Analysis Run Date",
+        default=fields.Datetime.now,
+        readonly=True,
+        index=True,
     )
 
     dead_stock_count = fields.Integer(
@@ -93,6 +113,7 @@ class RevivaIQAnalyticsSnapshot(models.Model):
         string="Status",
         default="confirmed",
         required=True,
+        index=True,
     )
 
     note = fields.Text(string="Note")
