@@ -118,7 +118,6 @@
 
                 <separator/>
 
-                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
                 <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
                 <filter string="Manual Source" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
                 <filter string="Generated High Risk" name="generated_high_risk"

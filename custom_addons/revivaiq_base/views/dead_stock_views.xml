@@ -120,8 +120,7 @@
                         domain="[('state', 'in', ['draft', 'active']), ('risk_level', 'in', ['high', 'critical'])]"/>
 
                 <separator/>
-
-                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
+                
                 <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
                 <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
                 <filter string="Active Generated" name="active_generated"
