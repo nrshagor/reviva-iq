@@ -86,6 +86,13 @@
                         <field name="risk_level"/>
                         <field name="risk_score"/>
                     </group>
+                    
+                    <group string="Operational Tracking" col="2">
+                        <field name="reviewed_by" readonly="1"/>
+                        <field name="reviewed_date" readonly="1"/>
+                        <field name="resolved_by" readonly="1"/>
+                        <field name="resolved_date" readonly="1"/>
+                    </group>
 
                     <group string="Internal Note">
                         <field name="note"/>

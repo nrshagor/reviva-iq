@@ -64,6 +64,11 @@
                         <field name="analysis_run_date" readonly="1"/>
                     </group>
 
+                    <group string="Confirmation Tracking" col="2">
+                        <field name="confirmed_by" readonly="1"/>
+                        <field name="confirmed_date" readonly="1"/>
+                    </group>
+                    
                     <group string="Dead Stock Summary" col="2">
                         <field name="dead_stock_count"/>
                         <field name="dead_stock_value" widget="monetary"/>

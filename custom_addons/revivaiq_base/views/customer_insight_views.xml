@@ -72,7 +72,6 @@
                         <field name="partner_id"/>
                         <field name="company_id" readonly="1"/>
                         <field name="customer_status"/>
-                        <field name="recovery_stage"/>
                     </group>
 
                     <group string="Analysis Tracking" col="2">
@@ -91,7 +90,14 @@
                     <group string="Recovery Score">
                         <field name="recovery_score"/>
                     </group>
-
+                    <group string="Recovery Tracking" col="2">
+                        <field name="contacted_by" readonly="1"/>
+                        <field name="contacted_date" readonly="1"/>
+                        <field name="recovered_by" readonly="1"/>
+                        <field name="recovered_date" readonly="1"/>
+                        <field name="ignored_by" readonly="1"/>
+                        <field name="ignored_date" readonly="1"/>
+                    </group>
                     <group string="Note">
                         <field name="note"/>
                     </group>
@@ -109,7 +115,7 @@
                 <field name="partner_id"/>
                 <field name="customer_status"/>
                 <field name="analysis_source"/>
-
+                <field name="recovery_stage"/>
                 <filter string="High Score"
                         name="high_score"
                         domain="[('recovery_score', '&gt;=', 80)]"/>
