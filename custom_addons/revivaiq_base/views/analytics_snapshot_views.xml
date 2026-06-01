@@ -36,59 +36,58 @@
         <field name="arch" type="xml">
             <form string="Analytics Snapshot">
                 <header>
-                    <button name="action_confirm_snapshot"
-                            string="Confirm Snapshot"
-                            type="object"
-                            class="btn-primary"
-                            invisible="state == 'confirmed'"/>
-
-                    <button name="action_reset_to_draft"
-                            string="Reset to Draft"
-                            type="object"
+                    <button name="action_confirm_snapshot" string="Confirm Snapshot" type="object"
+                            class="btn-primary" invisible="state == 'confirmed'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
                             invisible="state == 'draft'"/>
 
-                    <field name="state"
-                        widget="statusbar"
-                        statusbar_visible="draft,confirmed"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
                 </header>
+
                 <sheet>
-                    <group string="Snapshot Info" col="2">
-                        <field name="name"/>
-                        <field name="snapshot_date"/>
-                        <field name="company_id" readonly="1"/>
-                        <field name="snapshot_type"/>
+                    <group>
+                        <group string="Snapshot Info">
+                            <field name="name"/>
+                            <field name="snapshot_date"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="snapshot_type"/>
+                        </group>
+
+                        <group string="Revenue Risk">
+                            <field name="total_revenue_risk" widget="monetary"/>
+                            <field name="high_risk_dead_stock_count"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
                     </group>
 
-                    <group string="Analysis Tracking" col="2">
-                        <field name="analysis_source" readonly="1"/>
-                        <field name="analysis_run_date" readonly="1"/>
+                    <group>
+                        <group string="Dead Stock Summary">
+                            <field name="dead_stock_count"/>
+                            <field name="dead_stock_value" widget="monetary"/>
+                        </group>
+
+                        <group string="Customer Recovery Summary">
+                            <field name="inactive_customer_count"/>
+                            <field name="customer_recovery_count"/>
+                            <field name="high_score_customer_count"/>
+                            <field name="recovery_opportunity_value" widget="monetary"/>
+                        </group>
                     </group>
 
-                    <group string="Confirmation Tracking" col="2">
-                        <field name="confirmed_by" readonly="1"/>
-                        <field name="confirmed_date" readonly="1"/>
-                    </group>
-                    
-                    <group string="Dead Stock Summary" col="2">
-                        <field name="dead_stock_count"/>
-                        <field name="dead_stock_value" widget="monetary"/>
-                    </group>
+                    <group>
+                        <group string="Analysis Tracking">
+                            <field name="analysis_source" readonly="1"/>
+                            <field name="analysis_run_date" readonly="1"/>
+                        </group>
 
-                    <group string="Customer Recovery Summary" col="2">
-                        <field name="inactive_customer_count"/>
-                        <field name="customer_recovery_count"/>
-                        <field name="high_score_customer_count"/>
-                        <field name="recovery_opportunity_value" widget="monetary"/>
-                    </group>
-
-                    <group string="Revenue Risk" col="2">
-                        <field name="high_risk_dead_stock_count"/>
-                        <field name="total_revenue_risk" widget="monetary"/>
-                        <field name="currency_id" invisible="1"/>
+                        <group string="Confirmation Tracking">
+                            <field name="confirmed_by" readonly="1"/>
+                            <field name="confirmed_date" readonly="1"/>
+                        </group>
                     </group>
 
                     <group string="Note">
-                        <field name="note"/>
+                        <field name="note" nolabel="1"/>
                     </group>
                 </sheet>
             </form>
@@ -106,72 +105,36 @@
                 <field name="state"/>
                 <field name="analysis_source"/>
 
-                <filter string="High Revenue Risk"
-                        name="high_revenue_risk"
+                <filter string="High Revenue Risk" name="high_revenue_risk"
                         domain="[('total_revenue_risk', '&gt;=', 10000)]"/>
-
-                <filter string="Medium Revenue Risk"
-                        name="medium_revenue_risk"
+                <filter string="Medium Revenue Risk" name="medium_revenue_risk"
                         domain="[('total_revenue_risk', '&gt;=', 5000), ('total_revenue_risk', '&lt;', 10000)]"/>
 
                 <separator/>
 
-                <filter string="Manual Snapshot"
-                        name="manual"
-                        domain="[('snapshot_type', '=', 'manual')]"/>
-
-                <filter string="System Snapshot"
-                        name="system"
-                        domain="[('snapshot_type', '=', 'system')]"/>
-
-                <filter string="Confirmed"
-                        name="confirmed"
-                        domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Manual Snapshot" name="manual" domain="[('snapshot_type', '=', 'manual')]"/>
+                <filter string="System Snapshot" name="system" domain="[('snapshot_type', '=', 'system')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
 
                 <separator/>
 
-                <filter string="Demo Data"
-                        name="source_demo"
-                        domain="[('analysis_source', '=', 'demo')]"/>
-
-                <filter string="Generated"
-                        name="source_generated"
-                        domain="[('analysis_source', '=', 'generated')]"/>
-
-                <filter string="Manual Source"
-                        name="source_manual"
-                        domain="[('analysis_source', '=', 'manual')]"/>
-
-                <filter string="Generated High Risk"
-                        name="generated_high_risk"
+                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual Source" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+                <filter string="Generated High Risk" name="generated_high_risk"
                         domain="[('analysis_source', '=', 'generated'), ('total_revenue_risk', '&gt;=', 10000)]"/>
 
                 <separator/>
 
-                <filter string="Recently Generated"
-                        name="recently_generated"
+                <filter string="Recently Generated" name="recently_generated"
                         domain="[('analysis_run_date', '!=', False)]"/>
 
                 <group expand="0" string="Group By">
-                    <filter string="Snapshot Type"
-                            name="group_snapshot_type"
-                            context="{'group_by': 'snapshot_type'}"/>
-
-                    <filter string="Status"
-                            name="group_state"
-                            context="{'group_by': 'state'}"/>
-
-                    <filter string="Snapshot Date"
-                            name="group_snapshot_date"
-                            context="{'group_by': 'snapshot_date'}"/>
-
-                    <filter string="Analysis Source"
-                            name="group_analysis_source"
-                            context="{'group_by': 'analysis_source'}"/>
-
-                    <filter string="Analysis Run Date"
-                            name="group_analysis_run_date"
-                            context="{'group_by': 'analysis_run_date'}"/>
+                    <filter string="Snapshot Type" name="group_snapshot_type" context="{'group_by': 'snapshot_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Snapshot Date" name="group_snapshot_date" context="{'group_by': 'snapshot_date'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
                 </group>
             </search>
         </field>

@@ -35,71 +35,65 @@
         <field name="arch" type="xml">
             <form string="Dead Stock">
                 <header>
-                    <button name="action_mark_active"
-                            string="Mark Active"
-                            type="object"
-                            class="btn-primary"
-                            invisible="state != 'draft'"/>
-
-                    <button name="action_mark_reviewed"
-                            string="Mark Reviewed"
-                            type="object"
-                            class="btn-primary"
-                            invisible="state not in ('draft', 'active')"/>
-
-                    <button name="action_mark_resolved"
-                            string="Mark Resolved"
-                            type="object"
-                            class="btn-success"
-                            invisible="state == 'resolved'"/>
-
-                    <button name="action_reset_to_draft"
-                            string="Reset to Draft"
-                            type="object"
+                    <button name="action_mark_active" string="Mark Active" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_mark_reviewed" string="Mark Reviewed" type="object"
+                            class="btn-primary" invisible="state not in ('draft', 'active')"/>
+                    <button name="action_mark_resolved" string="Mark Resolved" type="object"
+                            class="btn-success" invisible="state == 'resolved'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
                             invisible="state == 'draft'"/>
 
-                    <field name="state"
-                        widget="statusbar"
-                        statusbar_visible="draft,active,reviewed,resolved"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,reviewed,resolved"/>
                 </header>
+
                 <sheet>
-                    <group string="Product">
-                        <field name="product_id"/>
-                        <field name="company_id" readonly="1"/>
+                    <group>
+                        <group string="Product">
+                            <field name="product_id"/>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+
+                        <group string="Risk Summary">
+                            <field name="risk_level"/>
+                            <field name="risk_score"/>
+                            <field name="inventory_value" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
                     </group>
 
-                    <group string="Analysis Tracking" col="2">
-                        <field name="analysis_source" readonly="1"/>
-                        <field name="analysis_run_date" readonly="1"/>
+                    <group>
+                        <group string="Inventory Movement">
+                            <field name="quantity_on_hand"/>
+                            <field name="quantity_sold"/>
+                            <field name="last_sale_date"/>
+                            <field name="days_without_sale"/>
+                        </group>
+
+                        <group string="Analysis Tracking">
+                            <field name="analysis_source" readonly="1"/>
+                            <field name="analysis_run_date" readonly="1"/>
+                        </group>
                     </group>
 
-                    <group string="Inventory Movement" col="2">
-                        <field name="quantity_on_hand"/>
-                        <field name="quantity_sold"/>
-                        <field name="last_sale_date"/>
-                        <field name="days_without_sale"/>
-                    </group>
+                    <group>
+                        <group string="Operational Tracking">
+                            <field name="reviewed_by" readonly="1"/>
+                            <field name="reviewed_date" readonly="1"/>
+                        </group>
 
-                    <group string="Risk Analysis" col="2">
-                        <field name="inventory_value" widget="monetary"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="risk_level"/>
-                        <field name="risk_score"/>
-                    </group>
-                    
-                    <group string="Operational Tracking" col="2">
-                        <field name="reviewed_by" readonly="1"/>
-                        <field name="reviewed_date" readonly="1"/>
-                        <field name="resolved_by" readonly="1"/>
-                        <field name="resolved_date" readonly="1"/>
+                        <group string="Resolution Tracking">
+                            <field name="resolved_by" readonly="1"/>
+                            <field name="resolved_date" readonly="1"/>
+                        </group>
                     </group>
 
                     <group string="Internal Note">
-                        <field name="note"/>
+                        <field name="note" nolabel="1"/>
                     </group>
                 </sheet>
             </form>
-
         </field>
     </record>
 
@@ -113,80 +107,37 @@
                 <field name="state"/>
                 <field name="analysis_source"/>
 
-                <filter string="Critical Risk"
-                        name="critical_risk"
-                        domain="[('risk_level', '=', 'critical')]"/>
-
-                <filter string="High Risk"
-                        name="high_only"
-                        domain="[('risk_level', '=', 'high')]"/>
-
-                <filter string="Medium Risk"
-                        name="medium_risk"
-                        domain="[('risk_level', '=', 'medium')]"/>
-
-                <filter string="High/Critical Risk"
-                        name="high_risk"
-                        domain="[('risk_level', 'in', ['high', 'critical'])]"/>
+                <filter string="Critical Risk" name="critical_risk" domain="[('risk_level', '=', 'critical')]"/>
+                <filter string="High Risk" name="high_only" domain="[('risk_level', '=', 'high')]"/>
+                <filter string="Medium Risk" name="medium_risk" domain="[('risk_level', '=', 'medium')]"/>
+                <filter string="High/Critical Risk" name="high_risk" domain="[('risk_level', 'in', ['high', 'critical'])]"/>
 
                 <separator/>
 
-                <filter string="Active"
-                        name="active"
-                        domain="[('state', '=', 'active')]"/>
-
-                <filter string="Reviewed"
-                        name="reviewed"
-                        domain="[('state', '=', 'reviewed')]"/>
-
-                <filter string="Review Needed"
-                        name="review_needed"
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Reviewed" name="reviewed" domain="[('state', '=', 'reviewed')]"/>
+                <filter string="Review Needed" name="review_needed"
                         domain="[('state', 'in', ['draft', 'active']), ('risk_level', 'in', ['high', 'critical'])]"/>
 
                 <separator/>
 
-                <filter string="Demo Data"
-                        name="source_demo"
-                        domain="[('analysis_source', '=', 'demo')]"/>
-
-                <filter string="Generated"
-                        name="source_generated"
-                        domain="[('analysis_source', '=', 'generated')]"/>
-
-                <filter string="Manual"
-                        name="source_manual"
-                        domain="[('analysis_source', '=', 'manual')]"/>
-
-                <filter string="Active Generated"
-                        name="active_generated"
+                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+                <filter string="Active Generated" name="active_generated"
                         domain="[('analysis_source', '=', 'generated'), ('state', '=', 'active')]"/>
 
                 <separator/>
 
-                <filter string="Recently Analyzed"
-                        name="recently_analyzed"
+                <filter string="Recently Analyzed" name="recently_analyzed"
                         domain="[('analysis_run_date', '!=', False)]"/>
 
                 <group expand="0" string="Group By">
-                    <filter string="Risk Level"
-                            name="group_risk_level"
-                            context="{'group_by': 'risk_level'}"/>
-
-                    <filter string="Status"
-                            name="group_state"
-                            context="{'group_by': 'state'}"/>
-
-                    <filter string="Analysis Source"
-                            name="group_analysis_source"
-                            context="{'group_by': 'analysis_source'}"/>
-
-                    <filter string="Analysis Run Date"
-                            name="group_analysis_run_date"
-                            context="{'group_by': 'analysis_run_date'}"/>
-
-                    <filter string="Product"
-                            name="group_product"
-                            context="{'group_by': 'product_id'}"/>
+                    <filter string="Risk Level" name="group_risk_level" context="{'group_by': 'risk_level'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
                 </group>
             </search>
         </field>
