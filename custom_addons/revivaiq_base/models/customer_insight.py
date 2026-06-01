@@ -91,3 +91,18 @@ class RevivaIQCustomerInsight(models.Model):
             "Customer insight already exists for this company.",
         )
     ]
+
+    def action_mark_review(self):
+        self.write({"recovery_stage": "review"})
+
+    def action_mark_contacted(self):
+        self.write({"recovery_stage": "contacted"})
+
+    def action_mark_recovered(self):
+        self.write({"recovery_stage": "recovered"})
+
+    def action_mark_ignored(self):
+        self.write({"recovery_stage": "ignored"})
+
+    def action_reset_to_new(self):
+        self.write({"recovery_stage": "new"})

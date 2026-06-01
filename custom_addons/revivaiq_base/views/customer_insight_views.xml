@@ -34,6 +34,39 @@
         <field name="model">revivaiq.customer.insight</field>
         <field name="arch" type="xml">
             <form string="Customer Insight">
+                <header>
+                    <button name="action_mark_review"
+                            string="Mark Review"
+                            type="object"
+                            class="btn-primary"
+                            invisible="recovery_stage != 'new'"/>
+
+                    <button name="action_mark_contacted"
+                            string="Mark Contacted"
+                            type="object"
+                            class="btn-primary"
+                            invisible="recovery_stage not in ('new', 'review')"/>
+
+                    <button name="action_mark_recovered"
+                            string="Mark Recovered"
+                            type="object"
+                            class="btn-success"
+                            invisible="recovery_stage == 'recovered'"/>
+
+                    <button name="action_mark_ignored"
+                            string="Mark Ignored"
+                            type="object"
+                            invisible="recovery_stage == 'ignored'"/>
+
+                    <button name="action_reset_to_new"
+                            string="Reset to New"
+                            type="object"
+                            invisible="recovery_stage == 'new'"/>
+
+                    <field name="recovery_stage"
+                        widget="statusbar"
+                        statusbar_visible="new,review,contacted,recovered,ignored"/>
+                </header>
                 <sheet>
                     <group string="Customer">
                         <field name="partner_id"/>
@@ -64,6 +97,7 @@
                     </group>
                 </sheet>
             </form>
+
         </field>
     </record>
 
@@ -74,7 +108,6 @@
             <search string="Search Customer Insights">
                 <field name="partner_id"/>
                 <field name="customer_status"/>
-                <field name="recovery_stage"/>
                 <field name="analysis_source"/>
 
                 <filter string="High Score"

@@ -83,6 +83,18 @@ class RevivaIQDeadStock(models.Model):
 
     note = fields.Text(string="Internal Note")
 
+    def action_mark_active(self):
+        self.write({"state": "active"})
+
+    def action_mark_reviewed(self):
+        self.write({"state": "reviewed"})
+
+    def action_mark_resolved(self):
+        self.write({"state": "resolved"})
+
+    def action_reset_to_draft(self):
+        self.write({"state": "draft"})
+
     def action_open_dead_stock_settings(self):
         dashboard = self.env["revivaiq.dashboard"].search(
             [("company_id", "=", self.env.company.id)],

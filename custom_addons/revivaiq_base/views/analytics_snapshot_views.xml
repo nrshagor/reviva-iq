@@ -35,13 +35,28 @@
         <field name="model">revivaiq.analytics.snapshot</field>
         <field name="arch" type="xml">
             <form string="Analytics Snapshot">
+                <header>
+                    <button name="action_confirm_snapshot"
+                            string="Confirm Snapshot"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state == 'confirmed'"/>
+
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state == 'draft'"/>
+
+                    <field name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,confirmed"/>
+                </header>
                 <sheet>
                     <group string="Snapshot Info" col="2">
                         <field name="name"/>
                         <field name="snapshot_date"/>
                         <field name="company_id" readonly="1"/>
                         <field name="snapshot_type"/>
-                        <field name="state"/>
                     </group>
 
                     <group string="Analysis Tracking" col="2">

@@ -65,45 +65,14 @@ class RevivaIQAnalyticsSnapshot(models.Model):
         index=True,
     )
 
-    dead_stock_count = fields.Integer(
-        string="Dead Stock Count",
-        readonly=True,
-    )
-
-    dead_stock_value = fields.Monetary(
-        string="Dead Stock Value",
-        readonly=True,
-    )
-
-    inactive_customer_count = fields.Integer(
-        string="Inactive Customers",
-        readonly=True,
-    )
-
-    recovery_opportunity_value = fields.Monetary(
-        string="Recovery Opportunity Value",
-        readonly=True,
-    )
-
-    total_revenue_risk = fields.Monetary(
-        string="Total Revenue Risk",
-        readonly=True,
-    )
-
-    customer_recovery_count = fields.Integer(
-        string="Customer Recovery Count",
-        readonly=True,
-    )
-
-    high_risk_dead_stock_count = fields.Integer(
-        string="High Risk Dead Stock",
-        readonly=True,
-    )
-
-    high_score_customer_count = fields.Integer(
-        string="High Score Customers",
-        readonly=True,
-    )
+    dead_stock_count = fields.Integer(string="Dead Stock Count", readonly=True)
+    dead_stock_value = fields.Monetary(string="Dead Stock Value", readonly=True)
+    inactive_customer_count = fields.Integer(string="Inactive Customers", readonly=True)
+    recovery_opportunity_value = fields.Monetary(string="Recovery Opportunity Value", readonly=True)
+    total_revenue_risk = fields.Monetary(string="Total Revenue Risk", readonly=True)
+    customer_recovery_count = fields.Integer(string="Customer Recovery Count", readonly=True)
+    high_risk_dead_stock_count = fields.Integer(string="High Risk Dead Stock", readonly=True)
+    high_score_customer_count = fields.Integer(string="High Score Customers", readonly=True)
 
     state = fields.Selection(
         [
@@ -117,3 +86,9 @@ class RevivaIQAnalyticsSnapshot(models.Model):
     )
 
     note = fields.Text(string="Note")
+
+    def action_confirm_snapshot(self):
+        self.write({"state": "confirmed"})
+
+    def action_reset_to_draft(self):
+        self.write({"state": "draft"})

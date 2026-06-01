@@ -34,11 +34,38 @@
         <field name="model">revivaiq.dead.stock</field>
         <field name="arch" type="xml">
             <form string="Dead Stock">
+                <header>
+                    <button name="action_mark_active"
+                            string="Mark Active"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_mark_reviewed"
+                            string="Mark Reviewed"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ('draft', 'active')"/>
+
+                    <button name="action_mark_resolved"
+                            string="Mark Resolved"
+                            type="object"
+                            class="btn-success"
+                            invisible="state == 'resolved'"/>
+
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state == 'draft'"/>
+
+                    <field name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,active,reviewed,resolved"/>
+                </header>
                 <sheet>
                     <group string="Product">
                         <field name="product_id"/>
                         <field name="company_id" readonly="1"/>
-                        <field name="state"/>
                     </group>
 
                     <group string="Analysis Tracking" col="2">
@@ -65,6 +92,7 @@
                     </group>
                 </sheet>
             </form>
+
         </field>
     </record>
 
