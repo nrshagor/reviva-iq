@@ -15,6 +15,7 @@
         <field name="model">revivaiq.dashboard</field>
         <field name="arch" type="xml">
             <form string="RevivaIQ Dashboard" create="0" delete="0">
+
                 <header>
                     <button name="action_open_dead_stock_analysis_wizard"
                             string="Run Dead Stock"
@@ -33,24 +34,51 @@
                 </header>
 
                 <sheet class="o_form_sheet_full_width">
+
                     <field name="currency_id" invisible="1"/>
 
                     <div class="oe_title">
-                        <h1><field name="name" readonly="1"/></h1>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+
                         <p class="text-muted">
-                            Revenue recovery summary for dead stock, inactive customers, and analytics snapshots.
+                            Operational revenue recovery dashboard for active dead stock,
+                            customer recovery opportunities, and snapshot-based revenue risk.
                         </p>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12">
-                            <group string="Dead Stock Summary">
+                    <div class="row mt16">
+
+                        <!-- DEAD STOCK -->
+                        <div class="col-lg-4 col-md-12 mb-4">
+                            <group string="DEAD STOCK RECOVERY">
+
+                                <div class="alert alert-danger" role="alert"
+                                     invisible="dead_stock_count == 0">
+                                    <strong>
+                                        <field name="dead_stock_count" readonly="1"/>
+                                    </strong>
+                                    active dead stock item(s) detected with estimated risk value of
+                                    <strong>
+                                        <field name="dead_stock_total_risk_value"
+                                               widget="monetary"
+                                               readonly="1"/>
+                                    </strong>
+                                </div>
+
+                                <div class="alert alert-success" role="alert"
+                                     invisible="dead_stock_count != 0">
+                                    No active dead stock risk detected.
+                                </div>
+
                                 <field name="dead_stock_days_threshold" readonly="1"/>
                                 <field name="dead_stock_count" readonly="1"/>
-                                <field name="dead_stock_total_quantity" readonly="1"/>
-                                <field name="dead_stock_total_sold_quantity" readonly="1"/>
-                                <field name="dead_stock_total_risk_value" readonly="1"/>
+                                <field name="dead_stock_total_risk_value"
+                                       widget="monetary"
+                                       readonly="1"/>
                                 <field name="last_dead_stock_run" readonly="1"/>
+
                                 <button name="action_open_dead_stock"
                                         string="View Dead Stock Details"
                                         type="object"
@@ -58,13 +86,39 @@
                             </group>
                         </div>
 
-                        <div class="col-lg-4 col-md-12">
-                            <group string="Customer Recovery Summary">
-                                <field name="customer_inactivity_days_threshold" readonly="1"/>
-                                <field name="inactive_customer_count" readonly="1"/>
-                                <field name="high_score_customer_count" readonly="1"/>
-                                <field name="customer_recovery_value" readonly="1"/>
-                                <field name="last_customer_recovery_run" readonly="1"/>
+                        <!-- CUSTOMER RECOVERY -->
+                        <div class="col-lg-4 col-md-12 mb-4">
+                            <group string="CUSTOMER RECOVERY">
+
+                                <div class="alert alert-warning" role="alert"
+                                     invisible="inactive_customer_count == 0">
+                                    <strong>
+                                        <field name="inactive_customer_count" readonly="1"/>
+                                    </strong>
+                                    inactive customer opportunity record(s) detected.
+                                </div>
+
+                                <div class="alert alert-success" role="alert"
+                                     invisible="inactive_customer_count != 0">
+                                    No inactive customer recovery risk detected.
+                                </div>
+
+                                <field name="customer_inactivity_days_threshold"
+                                       readonly="1"/>
+
+                                <field name="inactive_customer_count"
+                                       readonly="1"/>
+
+                                <field name="high_score_customer_count"
+                                       readonly="1"/>
+
+                                <field name="customer_recovery_value"
+                                       widget="monetary"
+                                       readonly="1"/>
+
+                                <field name="last_customer_recovery_run"
+                                       readonly="1"/>
+
                                 <button name="action_open_customer_insights"
                                         string="View Customer Insights"
                                         type="object"
@@ -72,20 +126,46 @@
                             </group>
                         </div>
 
-                        <div class="col-lg-4 col-md-12">
-                            <group string="Analytics Snapshot Summary">
-                                <field name="latest_snapshot_count" readonly="1"/>
-                                <field name="latest_total_revenue_risk" readonly="1"/>
-                                <field name="last_snapshot_run" readonly="1"/>
-                                <field name="last_snapshot_dead_stock_count" readonly="1"/>
-                                <field name="last_snapshot_customer_recovery_count" readonly="1"/>
+                        <!-- SNAPSHOT -->
+                        <div class="col-lg-4 col-md-12 mb-4">
+                            <group string="ANALYTICS SNAPSHOT">
+
+                                <div class="alert alert-info" role="alert"
+                                     invisible="latest_snapshot_count == 0">
+
+                                    Latest revenue risk snapshot estimated at
+
+                                    <strong>
+                                        <field name="latest_total_revenue_risk"
+                                               widget="monetary"
+                                               readonly="1"/>
+                                    </strong>
+                                </div>
+
+                                <div class="alert alert-secondary" role="alert"
+                                     invisible="latest_snapshot_count != 0">
+                                    No analytics snapshot generated yet.
+                                </div>
+
+                                <field name="latest_snapshot_count"
+                                       readonly="1"/>
+
+                                <field name="latest_total_revenue_risk"
+                                       widget="monetary"
+                                       readonly="1"/>
+
+                                <field name="last_snapshot_run"
+                                       readonly="1"/>
+
                                 <button name="action_open_analytics_snapshots"
                                         string="View Snapshot History"
                                         type="object"
                                         class="btn-secondary"/>
                             </group>
                         </div>
+
                     </div>
+
                 </sheet>
             </form>
         </field>

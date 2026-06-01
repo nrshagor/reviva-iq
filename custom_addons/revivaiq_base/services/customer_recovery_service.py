@@ -2,15 +2,38 @@ from odoo import fields
 
 
 class CustomerRecoveryService:
+    SAFE_REGENERATION_STAGES = ["new", "review"]
+    PROTECTED_OPERATIONAL_STAGES = ["contacted", "recovered", "ignored"]
+
     def __init__(self, env):
         self.env = env
+
+    def _cleanup_stale_generated_insights(self, company, limit):
+        stale_records = self.env["revivaiq.customer.insight"].search(
+            [
+                ("company_id", "=", company.id),
+                ("analysis_source", "=", "generated"),
+                ("recovery_stage", "in", self.SAFE_REGENERATION_STAGES),
+            ],
+            limit=limit,
+            order="id asc",
+        )
+
+        cleanup_count = len(stale_records)
+        stale_records.unlink()
+        return cleanup_count
 
     def run_customer_recovery_analysis(self, dashboard):
         company = self.env.company
         inactivity_days = dashboard.customer_inactivity_days_threshold or 90
         batch_limit = dashboard.customer_batch_limit or 500
+        safe_limit = min(max(batch_limit, 50), 5000)
 
-        cutoff_date = fields.Date.subtract(fields.Date.today(), days=inactivity_days)
+        now = fields.Datetime.now()
+        today = fields.Date.today()
+        cutoff_date = fields.Date.subtract(today, days=inactivity_days)
+
+        cleanup_count = self._cleanup_stale_generated_insights(company, safe_limit)
 
         partners = self.env["res.partner"].search(
             [
@@ -18,15 +41,28 @@ class CustomerRecoveryService:
                 ("customer_rank", ">", 0),
                 ("active", "=", True),
             ],
-            limit=batch_limit,
+            limit=safe_limit,
             order="id desc",
         )
 
         Insight = self.env["revivaiq.customer.insight"]
         created_count = 0
-        updated_count = 0
+        skipped_protected_count = 0
 
         for partner in partners:
+            protected_existing = Insight.search(
+                [
+                    ("partner_id", "=", partner.id),
+                    ("company_id", "=", company.id),
+                    ("recovery_stage", "in", self.PROTECTED_OPERATIONAL_STAGES),
+                ],
+                limit=1,
+            )
+
+            if protected_existing:
+                skipped_protected_count += 1
+                continue
+
             orders = self.env["sale.order"].search(
                 [
                     ("partner_id", "=", partner.id),
@@ -46,7 +82,7 @@ class CustomerRecoveryService:
             if last_order_date > cutoff_date:
                 continue
 
-            days_inactive = (fields.Date.today() - last_order_date).days
+            days_inactive = (today - last_order_date).days
             total_revenue = sum(orders.mapped("amount_total"))
             total_order_count = len(orders)
 
@@ -60,15 +96,7 @@ class CustomerRecoveryService:
             customer_status = self._get_customer_status(days_inactive, inactivity_days)
             recovery_stage = "review" if recovery_score >= 70 else "new"
 
-            existing = Insight.search(
-                [
-                    ("partner_id", "=", partner.id),
-                    ("company_id", "=", company.id),
-                ],
-                limit=1,
-            )
-
-            vals = {
+            Insight.create({
                 "partner_id": partner.id,
                 "company_id": company.id,
                 "total_order_count": total_order_count,
@@ -79,20 +107,17 @@ class CustomerRecoveryService:
                 "customer_status": customer_status,
                 "recovery_stage": recovery_stage,
                 "analysis_source": "generated",
-                "analysis_run_date": fields.Datetime.now(),
+                "analysis_run_date": now,
                 "note": "Inactive customer detected by RevivaIQ recovery analytics.",
-            }
+            })
 
-            if existing:
-                existing.write(vals)
-                updated_count += 1
-            else:
-                Insight.create(vals)
-                created_count += 1
+            created_count += 1
 
         return {
             "created_records": created_count,
-            "updated_records": updated_count,
+            "updated_records": 0,
+            "cleanup_count": cleanup_count,
+            "skipped_protected_records": skipped_protected_count,
         }
 
     def _get_customer_status(self, days_inactive, inactivity_days):

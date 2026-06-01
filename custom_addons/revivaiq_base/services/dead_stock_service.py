@@ -7,25 +7,49 @@ class RevivaIQDeadStockService(models.AbstractModel):
     _name = "revivaiq.dead.stock.service"
     _description = "RevivaIQ Dead Stock Analytics Service"
 
+    SAFE_REGENERATION_STATES = ["draft", "active"]
+    PROTECTED_OPERATIONAL_STATES = ["reviewed", "resolved"]
+
+    def _cleanup_stale_generated_dead_stock(self, company, limit):
+        stale_records = self.env["revivaiq.dead.stock"].search(
+            [
+                ("company_id", "=", company.id),
+                ("analysis_source", "=", "generated"),
+                ("state", "in", self.SAFE_REGENERATION_STATES),
+            ],
+            limit=limit,
+            order="id asc",
+        )
+
+        cleanup_count = len(stale_records)
+        stale_records.unlink()
+        return cleanup_count
+
     def generate_dead_stock_analysis(self):
+        company = self.env.company
+
         dashboard = self.env["revivaiq.dashboard"].search(
-            [("company_id", "=", self.env.company.id)],
+            [("company_id", "=", company.id)],
             limit=1,
         )
 
         threshold_days = dashboard.dead_stock_days_threshold or 60
         minimum_quantity = dashboard.dead_stock_min_quantity or 1.0
         batch_limit = dashboard.dead_stock_max_batch_limit or 500
+        safe_limit = min(max(batch_limit, 50), 5000)
 
+        now = fields.Datetime.now()
         today = fields.Date.today()
         cutoff_date = today - timedelta(days=threshold_days)
+
+        cleanup_count = self._cleanup_stale_generated_dead_stock(company, safe_limit)
 
         products = self.env["product.product"].search(
             [
                 ("sale_ok", "=", True),
-                ("company_id", "in", [False, self.env.company.id]),
+                ("company_id", "in", [False, company.id]),
             ],
-            limit=batch_limit,
+            limit=safe_limit,
             order="id desc",
         )
 
@@ -35,13 +59,26 @@ class RevivaIQDeadStockService(models.AbstractModel):
 
         DeadStock = self.env["revivaiq.dead.stock"]
         created_records = 0
-        updated_records = 0
+        skipped_protected_records = 0
 
         for product in valid_products:
+            protected_existing = DeadStock.search(
+                [
+                    ("product_id", "=", product.id),
+                    ("company_id", "=", company.id),
+                    ("state", "in", self.PROTECTED_OPERATIONAL_STATES),
+                ],
+                limit=1,
+            )
+
+            if protected_existing:
+                skipped_protected_records += 1
+                continue
+
             sale_line = self.env["sale.order.line"].search(
                 [
                     ("product_id", "=", product.id),
-                    ("order_id.company_id", "=", self.env.company.id),
+                    ("order_id.company_id", "=", company.id),
                     ("order_id.state", "in", ["sale", "done"]),
                 ],
                 order="order_id.date_order desc",
@@ -71,17 +108,9 @@ class RevivaIQDeadStockService(models.AbstractModel):
                 risk_level = "medium"
                 risk_score = 55
 
-            existing = DeadStock.search(
-                [
-                    ("product_id", "=", product.id),
-                    ("company_id", "=", self.env.company.id),
-                ],
-                limit=1,
-            )
-
-            vals = {
+            DeadStock.create({
                 "product_id": product.id,
-                "company_id": self.env.company.id,
+                "company_id": company.id,
                 "quantity_on_hand": product.qty_available,
                 "quantity_sold": 0.0,
                 "last_sale_date": last_sale_date,
@@ -91,19 +120,16 @@ class RevivaIQDeadStockService(models.AbstractModel):
                 "risk_score": risk_score,
                 "state": "active",
                 "analysis_source": "generated",
-                "analysis_run_date": fields.Datetime.now(),
+                "analysis_run_date": now,
                 "note": "Dead stock candidate detected by RevivaIQ analytics.",
-            }
+            })
 
-            if existing:
-                existing.write(vals)
-                updated_records += 1
-            else:
-                DeadStock.create(vals)
-                created_records += 1
+            created_records += 1
 
         return {
             "success": True,
             "created_records": created_records,
-            "updated_records": updated_records,
+            "updated_records": 0,
+            "cleanup_count": cleanup_count,
+            "skipped_protected_records": skipped_protected_records,
         }

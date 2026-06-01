@@ -21,7 +21,6 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
         "security/ir.model.access.csv",
 
         "data/dashboard_data.xml",
-        "data/demo_data.xml",
         "data/server_actions.xml",
 
         "views/analysis_wizard_views.xml",

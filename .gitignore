@@ -1,12 +1,15 @@
 # Python
 __pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Odoo
+# Odoo runtime data
 odoo_data/
 postgres_data/
+*/odoo_data/
+*/postgres_data/
 
 # Logs
 *.log
@@ -17,8 +20,6 @@ postgres_data/
 # Environment
 .env
 
-# macOS
+# OS
 .DS_Store
-
-# Windows
 Thumbs.db
