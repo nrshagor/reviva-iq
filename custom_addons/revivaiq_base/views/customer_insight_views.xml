@@ -11,8 +11,10 @@
                             class="btn-primary"
                             display="always"/>
                 </header>
-                
+
                 <field name="partner_id"/>
+                <field name="analysis_source"/>
+                <field name="analysis_run_date"/>
                 <field name="total_order_count"/>
                 <field name="total_revenue" widget="monetary"/>
                 <field name="currency_id" column_invisible="1"/>
@@ -36,6 +38,11 @@
                         <field name="company_id" readonly="1"/>
                         <field name="customer_status"/>
                         <field name="recovery_stage"/>
+                    </group>
+
+                    <group string="Analysis Tracking" col="2">
+                        <field name="analysis_source" readonly="1"/>
+                        <field name="analysis_run_date" readonly="1"/>
                     </group>
 
                     <group string="Sales History" col="2">
@@ -74,9 +81,17 @@
                 <filter string="New Recovery" name="new_recovery" domain="[('recovery_stage', '=', 'new')]"/>
                 <filter string="Review" name="review" domain="[('recovery_stage', '=', 'review')]"/>
 
+                <separator/>
+
+                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+
                 <group expand="0" string="Group By">
                     <filter string="Customer Status" name="group_customer_status" context="{'group_by': 'customer_status'}"/>
                     <filter string="Recovery Stage" name="group_recovery_stage" context="{'group_by': 'recovery_stage'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
                 </group>
             </search>
         </field>

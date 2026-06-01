@@ -147,6 +147,7 @@ class RevivaIQDashboard(models.Model):
 
         result = self.env["revivaiq.dead.stock.service"].generate_dead_stock_analysis()
         created_records = result.get("created_records", 0)
+        updated_records = result.get("updated_records", 0)
 
         self.write({
             "last_dead_stock_run": fields.Datetime.now(),
@@ -155,7 +156,10 @@ class RevivaIQDashboard(models.Model):
 
         return self._show_notification(
             "Dead Stock Analysis Complete",
-            f"Created {created_records} dead stock record(s).",
+            (
+                f"Created {created_records} dead stock record(s). "
+                f"Updated {updated_records} existing record(s)."
+            ),
         )
 
     def action_run_customer_recovery_analysis(self):
@@ -163,7 +167,14 @@ class RevivaIQDashboard(models.Model):
 
         from ..services.customer_recovery_service import CustomerRecoveryService
 
-        created_records = CustomerRecoveryService(self.env).run_customer_recovery_analysis(self)
+        result = CustomerRecoveryService(self.env).run_customer_recovery_analysis(self)
+
+        if isinstance(result, dict):
+            created_records = result.get("created_records", 0)
+            updated_records = result.get("updated_records", 0)
+        else:
+            created_records = result or 0
+            updated_records = 0
 
         self.write({
             "last_customer_recovery_run": fields.Datetime.now(),

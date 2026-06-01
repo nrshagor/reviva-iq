@@ -13,6 +13,8 @@
                 </header>
 
                 <field name="name"/>
+                <field name="analysis_source"/>
+                <field name="analysis_run_date"/>
                 <field name="snapshot_date"/>
                 <field name="snapshot_type"/>
                 <field name="dead_stock_count"/>
@@ -38,6 +40,11 @@
                         <field name="company_id" readonly="1"/>
                         <field name="snapshot_type"/>
                         <field name="state"/>
+                    </group>
+
+                    <group string="Analysis Tracking" col="2">
+                        <field name="analysis_source" readonly="1"/>
+                        <field name="analysis_run_date" readonly="1"/>
                     </group>
 
                     <group string="Dead Stock Summary" col="2">
@@ -80,10 +87,19 @@
                 <filter string="System" name="system" domain="[('snapshot_type', '=', 'system')]"/>
                 <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
 
+                <separator/>
+
+                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+
                 <group expand="0" string="Group By">
                     <filter string="Snapshot Type" name="group_snapshot_type" context="{'group_by': 'snapshot_type'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                     <filter string="Snapshot Date" name="group_snapshot_date" context="{'group_by': 'snapshot_date'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
+                
                 </group>
             </search>
         </field>

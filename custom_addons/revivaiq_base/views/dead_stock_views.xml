@@ -13,6 +13,8 @@
                 </header>
 
                 <field name="product_id"/>
+                <field name="analysis_source"/>
+                <field name="analysis_run_date"/>
                 <field name="quantity_on_hand"/>
                 <field name="quantity_sold"/>
                 <field name="days_without_sale"/>
@@ -35,6 +37,11 @@
                         <field name="product_id"/>
                         <field name="company_id" readonly="1"/>
                         <field name="state"/>
+                    </group>
+
+                    <group string="Analysis Tracking" col="2">
+                        <field name="analysis_source" readonly="1"/>
+                        <field name="analysis_run_date" readonly="1"/>
                     </group>
 
                     <group string="Inventory Movement" col="2">
@@ -72,9 +79,18 @@
                 <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
                 <filter string="Reviewed" name="reviewed" domain="[('state', '=', 'reviewed')]"/>
 
+                <separator/>
+
+                <filter string="Demo Data" name="source_demo" domain="[('analysis_source', '=', 'demo')]"/>
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+
                 <group expand="0" string="Group By">
                     <filter string="Risk Level" name="group_risk_level" context="{'group_by': 'risk_level'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
+                
                 </group>
             </search>
         </field>
