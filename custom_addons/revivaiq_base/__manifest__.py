@@ -22,6 +22,7 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
 
         "data/dashboard_data.xml",
         "data/demo_data.xml",
+        "data/server_actions.xml",
 
         "views/analysis_wizard_views.xml",
         "views/dead_stock_views.xml",
