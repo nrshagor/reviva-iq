@@ -47,6 +47,8 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
     "static/description/screenshot_08_dead_stock_analysis_wizard.png",
     "static/description/screenshot_09_customer_search_filters.png",
     ],
+    "price": 149.00,
+    "currency": "USD",
     "demo": [],
     "installable": True,
     "application": True,
