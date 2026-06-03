@@ -7,6 +7,11 @@ class RevivaIQDeadStock(models.Model):
     _order = "risk_score desc, id desc"
 
     product_id = fields.Many2one("product.product", string="Product", required=True, index=True, ondelete="cascade")
+    product_image_128 = fields.Image(
+    string="Product Image",
+    related="product_id.image_128",
+    readonly=True,
+    )
     company_id = fields.Many2one("res.company", string="Company", required=True, default=lambda self: self.env.company, index=True)
 
     quantity_on_hand = fields.Float(string="Quantity On Hand", default=0.0)

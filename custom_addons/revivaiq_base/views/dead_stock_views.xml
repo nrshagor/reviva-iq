@@ -4,8 +4,9 @@
         <field name="model">revivaiq.dead.stock</field>
         <field name="arch" type="xml">
             <list string="Dead Stock"
-                  decoration-danger="risk_level in ('high', 'critical')"
-                  decoration-warning="risk_level == 'medium'">
+                class="revivaiq-dead-stock-list"
+                decoration-danger="risk_level in ('high', 'critical')"
+                decoration-warning="risk_level == 'medium'">
                 <header>
                     <button name="%(action_revivaiq_dead_stock_analysis_wizard)d"
                             string="Run Dead Stock Analysis"
@@ -14,17 +15,17 @@
                             display="always"/>
                 </header>
 
+                <field name="product_image_128" widget="image" optional="show"/>
                 <field name="product_id"/>
                 <field name="analysis_source"/>
                 <field name="analysis_run_date"/>
                 <field name="quantity_on_hand"/>
-                <field name="quantity_sold"/>
                 <field name="days_without_sale"/>
                 <field name="inventory_value" widget="monetary"/>
                 <field name="currency_id" column_invisible="1"/>
-                <field name="risk_level"/>
+                <field name="risk_level" widget="badge"/>
                 <field name="risk_score"/>
-                <field name="state"/>
+                <field name="state" widget="badge"/>
             </list>
         </field>
     </record>

@@ -11,7 +11,7 @@ class RevivaIQDeadStockService(models.AbstractModel):
     PROTECTED_OPERATIONAL_STATES = ["reviewed", "resolved"]
 
     def _cleanup_stale_generated_dead_stock(self, company, limit):
-        stale_records = self.env["revivaiq.dead.stock"].search(
+        stale_records = self.env["revivaiq.dead.stock"].sudo().search(
             [
                 ("company_id", "=", company.id),
                 ("analysis_source", "=", "generated"),

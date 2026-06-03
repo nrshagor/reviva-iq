@@ -29,6 +29,11 @@ dead stock intelligence, executive dashboard, and export-ready operational analy
         "views/analytics_snapshot_views.xml",
         "views/revivaiq_menu_views.xml",
     ],
+    'assets': {
+        'web.assets_backend': [
+            'revivaiq_base/static/css/dashboard_style.css',  
+        ],
+    },
     "demo": [],
     "installable": True,
     "application": True,

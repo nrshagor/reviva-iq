@@ -4,8 +4,9 @@
         <field name="model">revivaiq.customer.insight</field>
         <field name="arch" type="xml">
             <list string="Customer Insights"
-                  decoration-danger="customer_status == 'lost'"
-                  decoration-warning="customer_status in ('inactive', 'at_risk')">
+                class="revivaiq-customer-insight-list"
+                decoration-danger="customer_status == 'lost'"
+                decoration-warning="customer_status in ('inactive', 'at_risk')">
                 <header>
                     <button name="%(action_revivaiq_customer_recovery_wizard)d"
                             string="Run Customer Recovery"
@@ -20,11 +21,10 @@
                 <field name="total_order_count"/>
                 <field name="total_revenue" widget="monetary"/>
                 <field name="currency_id" column_invisible="1"/>
-                <field name="last_order_date"/>
                 <field name="days_inactive"/>
-                <field name="customer_status"/>
+                <field name="customer_status" widget="badge"/>
                 <field name="recovery_score"/>
-                <field name="recovery_stage"/>
+                <field name="recovery_stage" widget="badge"/>
             </list>
         </field>
     </record>

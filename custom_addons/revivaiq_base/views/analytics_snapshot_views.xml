@@ -4,8 +4,9 @@
         <field name="model">revivaiq.analytics.snapshot</field>
         <field name="arch" type="xml">
             <list string="Analytics Snapshots"
-                  decoration-danger="total_revenue_risk &gt;= 10000"
-                  decoration-warning="total_revenue_risk &gt;= 5000 and total_revenue_risk &lt; 10000">
+                class="revivaiq-analytics-snapshot-list"
+                decoration-danger="total_revenue_risk &gt;= 10000"
+                decoration-warning="total_revenue_risk &gt;= 5000 and total_revenue_risk &lt; 10000">
                 <header>
                     <button name="%(action_revivaiq_snapshot_generation_wizard)d"
                             string="Generate Snapshot"
@@ -15,17 +16,17 @@
                 </header>
 
                 <field name="name"/>
-                <field name="analysis_source"/>
-                <field name="analysis_run_date"/>
                 <field name="snapshot_date"/>
-                <field name="snapshot_type"/>
+                <field name="snapshot_type" widget="badge"/>
                 <field name="dead_stock_count"/>
                 <field name="dead_stock_value" widget="monetary"/>
                 <field name="inactive_customer_count"/>
                 <field name="recovery_opportunity_value" widget="monetary"/>
                 <field name="total_revenue_risk" widget="monetary"/>
                 <field name="currency_id" column_invisible="1"/>
-                <field name="state"/>
+                <field name="analysis_source"/>
+                <field name="analysis_run_date"/>
+                <field name="state" widget="badge"/>
             </list>
         </field>
     </record>
