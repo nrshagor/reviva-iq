@@ -1,0 +1,141 @@
+<odoo>
+
+    <!-- Dead Stock Bulk Actions -->
+
+    <record id="server_action_dead_stock_mark_active" model="ir.actions.server">
+        <field name="name">Mark Active</field>
+        <field name="model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_active()
+        </field>
+    </record>
+
+    <record id="server_action_dead_stock_mark_reviewed" model="ir.actions.server">
+        <field name="name">Mark Reviewed</field>
+        <field name="model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_reviewed()
+        </field>
+    </record>
+
+    <record id="server_action_dead_stock_mark_resolved" model="ir.actions.server">
+        <field name="name">Mark Resolved</field>
+        <field name="model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_resolved()
+        </field>
+    </record>
+
+    <record id="server_action_dead_stock_reset_draft" model="ir.actions.server">
+        <field name="name">Reset to Draft</field>
+        <field name="model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_model_id" ref="model_revivaiq_dead_stock"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_reset_to_draft()
+        </field>
+    </record>
+
+    <!-- Customer Insight Bulk Actions -->
+
+    <record id="server_action_customer_mark_review" model="ir.actions.server">
+        <field name="name">Mark Review</field>
+        <field name="model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_review()
+        </field>
+    </record>
+
+    <record id="server_action_customer_mark_contacted" model="ir.actions.server">
+        <field name="name">Mark Contacted</field>
+        <field name="model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_contacted()
+        </field>
+    </record>
+
+    <record id="server_action_customer_mark_recovered" model="ir.actions.server">
+        <field name="name">Mark Recovered</field>
+        <field name="model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_recovered()
+        </field>
+    </record>
+
+    <record id="server_action_customer_mark_ignored" model="ir.actions.server">
+        <field name="name">Mark Ignored</field>
+        <field name="model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_mark_ignored()
+        </field>
+    </record>
+
+    <record id="server_action_customer_reset_new" model="ir.actions.server">
+        <field name="name">Reset to New</field>
+        <field name="model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_model_id" ref="model_revivaiq_customer_insight"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_reset_to_new()
+        </field>
+    </record>
+
+    <!-- Analytics Snapshot Bulk Actions -->
+
+    <record id="server_action_snapshot_confirm" model="ir.actions.server">
+        <field name="name">Confirm Snapshot</field>
+        <field name="model_id" ref="model_revivaiq_analytics_snapshot"/>
+        <field name="binding_model_id" ref="model_revivaiq_analytics_snapshot"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_confirm_snapshot()
+        </field>
+    </record>
+
+    <record id="server_action_snapshot_reset_draft" model="ir.actions.server">
+        <field name="name">Reset to Draft</field>
+        <field name="model_id" ref="model_revivaiq_analytics_snapshot"/>
+        <field name="binding_model_id" ref="model_revivaiq_analytics_snapshot"/>
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.action_reset_to_draft()
+        </field>
+    </record>
+
+</odoo>

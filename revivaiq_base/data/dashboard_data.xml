@@ -1,0 +1,7 @@
+<odoo>
+    <record id="revivaiq_dashboard_default" model="revivaiq.dashboard">
+        <field name="name">RevivaIQ Overview</field>
+        <field name="dead_stock_days_threshold">60</field>
+        <field name="dead_stock_min_quantity">1.0</field>
+    </record>
+</odoo>

@@ -1,0 +1,161 @@
+<odoo>
+    <record id="view_revivaiq_customer_insight_list" model="ir.ui.view">
+        <field name="name">revivaiq.customer.insight.list</field>
+        <field name="model">revivaiq.customer.insight</field>
+        <field name="arch" type="xml">
+            <list string="Customer Insights"
+                class="revivaiq-customer-insight-list"
+                decoration-danger="customer_status == 'lost'"
+                decoration-warning="customer_status in ('inactive', 'at_risk')">
+                <header>
+                    <button name="%(action_revivaiq_customer_recovery_wizard)d"
+                            string="Run Customer Recovery"
+                            type="action"
+                            class="btn-primary"
+                            display="always"/>
+                </header>
+
+                <field name="partner_id"/>
+                <field name="analysis_source"/>
+                <field name="analysis_run_date"/>
+                <field name="total_order_count"/>
+                <field name="total_revenue" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="days_inactive"/>
+                <field name="customer_status" widget="badge"/>
+                <field name="recovery_score"/>
+                <field name="recovery_stage" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_customer_insight_form" model="ir.ui.view">
+        <field name="name">revivaiq.customer.insight.form</field>
+        <field name="model">revivaiq.customer.insight</field>
+        <field name="arch" type="xml">
+            <form string="Customer Insight">
+                <header>
+                    <button name="action_mark_review" string="Mark Review" type="object"
+                            class="btn-primary" invisible="recovery_stage != 'new'"/>
+                    <button name="action_mark_contacted" string="Mark Contacted" type="object"
+                            class="btn-primary" invisible="recovery_stage not in ('new', 'review')"/>
+                    <button name="action_mark_recovered" string="Mark Recovered" type="object"
+                            class="btn-success" invisible="recovery_stage == 'recovered'"/>
+                    <button name="action_mark_ignored" string="Mark Ignored" type="object"
+                            invisible="recovery_stage == 'ignored'"/>
+                    <button name="action_reset_to_new" string="Reset to New" type="object"
+                            invisible="recovery_stage == 'new'"/>
+
+                    <field name="recovery_stage" widget="statusbar"
+                           statusbar_visible="new,review,contacted,recovered,ignored"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group string="Customer">
+                            <field name="partner_id"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="customer_status"/>
+                        </group>
+
+                        <group string="Recovery Summary">
+                            <field name="recovery_score"/>
+                            <field name="days_inactive"/>
+                            <field name="last_order_date"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Sales History">
+                            <field name="total_order_count"/>
+                            <field name="total_revenue" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+
+                        <group string="Analysis Tracking">
+                            <field name="analysis_source" readonly="1"/>
+                            <field name="analysis_run_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Contact Tracking">
+                            <field name="contacted_by" readonly="1"/>
+                            <field name="contacted_date" readonly="1"/>
+                        </group>
+
+                        <group string="Outcome Tracking">
+                            <field name="recovered_by" readonly="1"/>
+                            <field name="recovered_date" readonly="1"/>
+                            <field name="ignored_by" readonly="1"/>
+                            <field name="ignored_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Note">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_customer_insight_search" model="ir.ui.view">
+        <field name="name">revivaiq.customer.insight.search</field>
+        <field name="model">revivaiq.customer.insight</field>
+        <field name="arch" type="xml">
+            <search string="Search Customer Insights">
+                <field name="partner_id"/>
+                <field name="customer_status"/>
+                <field name="recovery_stage"/>
+                <field name="analysis_source"/>
+
+                <filter string="High Score" name="high_score" domain="[('recovery_score', '&gt;=', 80)]"/>
+                <filter string="Strong Recovery Opportunity" name="strong_recovery_opportunity"
+                        domain="[('recovery_score', '&gt;=', 70), ('customer_status', 'in', ['inactive', 'lost'])]"/>
+
+                <separator/>
+
+                <filter string="At Risk" name="at_risk" domain="[('customer_status', '=', 'at_risk')]"/>
+                <filter string="Inactive" name="inactive" domain="[('customer_status', '=', 'inactive')]"/>
+                <filter string="Lost" name="lost" domain="[('customer_status', '=', 'lost')]"/>
+                <filter string="Needs Review" name="needs_review"
+                        domain="[('recovery_stage', 'in', ['new', 'review']), ('customer_status', 'in', ['inactive', 'lost', 'at_risk'])]"/>
+
+                <separator/>
+
+                <filter string="New Recovery" name="new_recovery" domain="[('recovery_stage', '=', 'new')]"/>
+                <filter string="Review" name="review" domain="[('recovery_stage', '=', 'review')]"/>
+                <filter string="Contacted" name="contacted" domain="[('recovery_stage', '=', 'contacted')]"/>
+                <filter string="Recovered" name="recovered" domain="[('recovery_stage', '=', 'recovered')]"/>
+
+                <separator/>
+
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+                <filter string="Generated Needs Review" name="generated_needs_review"
+                        domain="[('analysis_source', '=', 'generated'), ('recovery_stage', 'in', ['new', 'review'])]"/>
+
+                <separator/>
+
+                <filter string="Recently Analyzed" name="recently_analyzed"
+                        domain="[('analysis_run_date', '!=', False)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Customer Status" name="group_customer_status" context="{'group_by': 'customer_status'}"/>
+                    <filter string="Recovery Stage" name="group_recovery_stage" context="{'group_by': 'recovery_stage'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
+                    <filter string="Customer" name="group_customer" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_customer_insight" model="ir.actions.act_window">
+        <field name="name">Customer Insights</field>
+        <field name="res_model">revivaiq.customer.insight</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_revivaiq_customer_insight_search"/>
+    </record>
+</odoo>

@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_revivaiq_dashboard_user,access.revivaiq.dashboard.user,model_revivaiq_dashboard,group_revivaiq_user,1,0,0,0
+access_revivaiq_dashboard_manager,access.revivaiq.dashboard.manager,model_revivaiq_dashboard,group_revivaiq_manager,1,1,0,0
+access_revivaiq_dead_stock_user,access.revivaiq.dead.stock.user,model_revivaiq_dead_stock,group_revivaiq_user,1,1,0,0
+access_revivaiq_dead_stock_manager,access.revivaiq.dead.stock.manager,model_revivaiq_dead_stock,group_revivaiq_manager,1,1,1,0
+access_revivaiq_customer_insight_user,access.revivaiq.customer.insight.user,model_revivaiq_customer_insight,group_revivaiq_user,1,1,0,0
+access_revivaiq_customer_insight_manager,access.revivaiq.customer.insight.manager,model_revivaiq_customer_insight,group_revivaiq_manager,1,1,1,0
+access_revivaiq_analytics_snapshot_user,access.revivaiq.analytics.snapshot.user,model_revivaiq_analytics_snapshot,group_revivaiq_user,1,1,0,0
+access_revivaiq_analytics_snapshot_manager,access.revivaiq.analytics.snapshot.manager,model_revivaiq_analytics_snapshot,group_revivaiq_manager,1,1,1,0
+access_revivaiq_dead_stock_analysis_wizard_user,access.revivaiq.dead.stock.analysis.wizard.user,model_revivaiq_dead_stock_analysis_wizard,group_revivaiq_user,1,1,1,1
+access_revivaiq_customer_recovery_wizard_user,access.revivaiq.customer.recovery.wizard.user,model_revivaiq_customer_recovery_wizard,group_revivaiq_user,1,1,1,1
+access_revivaiq_snapshot_generation_wizard_user,access.revivaiq.snapshot.generation.wizard.user,model_revivaiq_snapshot_generation_wizard,group_revivaiq_user,1,1,1,1

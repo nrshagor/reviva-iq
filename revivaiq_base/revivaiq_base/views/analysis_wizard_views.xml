@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Dead Stock Wizard -->
+    <record id="view_revivaiq_dead_stock_analysis_wizard_form" model="ir.ui.view">
+        <field name="name">revivaiq.dead.stock.analysis.wizard.form</field>
+        <field name="model">revivaiq.dead.stock.analysis.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Run Dead Stock Analysis">
+                <group>
+                    <field name="dead_stock_days_threshold"/>
+                    <field name="dead_stock_min_quantity"/>
+                    <field name="dead_stock_max_batch_limit"/>
+                </group>
+
+                <footer>
+                    <button
+                        name="action_run_dead_stock_analysis"
+                        type="object"
+                        string="Run Analysis"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_dead_stock_analysis_wizard" model="ir.actions.act_window">
+        <field name="name">Run Dead Stock Analysis</field>
+        <field name="res_model">revivaiq.dead.stock.analysis.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_revivaiq_dead_stock_analysis_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <!-- Customer Recovery Wizard -->
+    <record id="view_revivaiq_customer_recovery_wizard_form" model="ir.ui.view">
+        <field name="name">revivaiq.customer.recovery.wizard.form</field>
+        <field name="model">revivaiq.customer.recovery.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Run Customer Recovery Analysis">
+                <group>
+                    <field name="customer_inactivity_days_threshold"/>
+                    <field name="customer_batch_limit"/>
+                </group>
+
+                <footer>
+                    <button
+                        name="action_run_customer_recovery_analysis"
+                        type="object"
+                        string="Run Analysis"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_customer_recovery_wizard" model="ir.actions.act_window">
+        <field name="name">Run Customer Recovery Analysis</field>
+        <field name="res_model">revivaiq.customer.recovery.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_revivaiq_customer_recovery_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <!-- Snapshot Wizard -->
+    <record id="view_revivaiq_snapshot_generation_wizard_form" model="ir.ui.view">
+        <field name="name">revivaiq.snapshot.generation.wizard.form</field>
+        <field name="model">revivaiq.snapshot.generation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Analytics Snapshot">
+                <group>
+                    <field name="name"/>
+                    <field name="record_limit"/>
+                </group>
+
+                <footer>
+                    <button
+                        name="action_generate_snapshot"
+                        type="object"
+                        string="Generate Snapshot"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_snapshot_generation_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Analytics Snapshot</field>
+        <field name="res_model">revivaiq.snapshot.generation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_revivaiq_snapshot_generation_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

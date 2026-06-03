@@ -1,0 +1,149 @@
+<odoo>
+    <record id="view_revivaiq_analytics_snapshot_list" model="ir.ui.view">
+        <field name="name">revivaiq.analytics.snapshot.list</field>
+        <field name="model">revivaiq.analytics.snapshot</field>
+        <field name="arch" type="xml">
+            <list string="Analytics Snapshots"
+                class="revivaiq-analytics-snapshot-list"
+                decoration-danger="total_revenue_risk &gt;= 10000"
+                decoration-warning="total_revenue_risk &gt;= 5000 and total_revenue_risk &lt; 10000">
+                <header>
+                    <button name="%(action_revivaiq_snapshot_generation_wizard)d"
+                            string="Generate Snapshot"
+                            type="action"
+                            class="btn-primary"
+                            display="always"/>
+                </header>
+
+                <field name="name"/>
+                <field name="snapshot_date"/>
+                <field name="snapshot_type" widget="badge"/>
+                <field name="dead_stock_count"/>
+                <field name="dead_stock_value" widget="monetary"/>
+                <field name="inactive_customer_count"/>
+                <field name="recovery_opportunity_value" widget="monetary"/>
+                <field name="total_revenue_risk" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="analysis_source"/>
+                <field name="analysis_run_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_analytics_snapshot_form" model="ir.ui.view">
+        <field name="name">revivaiq.analytics.snapshot.form</field>
+        <field name="model">revivaiq.analytics.snapshot</field>
+        <field name="arch" type="xml">
+            <form string="Analytics Snapshot">
+                <header>
+                    <button name="action_confirm_snapshot" string="Confirm Snapshot" type="object"
+                            class="btn-primary" invisible="state == 'confirmed'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state == 'draft'"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group string="Snapshot Info">
+                            <field name="name"/>
+                            <field name="snapshot_date"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="snapshot_type"/>
+                        </group>
+
+                        <group string="Revenue Risk">
+                            <field name="total_revenue_risk" widget="monetary"/>
+                            <field name="high_risk_dead_stock_count"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Dead Stock Summary">
+                            <field name="dead_stock_count"/>
+                            <field name="dead_stock_value" widget="monetary"/>
+                        </group>
+
+                        <group string="Customer Recovery Summary">
+                            <field name="inactive_customer_count"/>
+                            <field name="customer_recovery_count"/>
+                            <field name="high_score_customer_count"/>
+                            <field name="recovery_opportunity_value" widget="monetary"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Analysis Tracking">
+                            <field name="analysis_source" readonly="1"/>
+                            <field name="analysis_run_date" readonly="1"/>
+                        </group>
+
+                        <group string="Confirmation Tracking">
+                            <field name="confirmed_by" readonly="1"/>
+                            <field name="confirmed_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Note">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_revivaiq_analytics_snapshot_search" model="ir.ui.view">
+        <field name="name">revivaiq.analytics.snapshot.search</field>
+        <field name="model">revivaiq.analytics.snapshot</field>
+        <field name="arch" type="xml">
+            <search string="Search Analytics Snapshots">
+                <field name="name"/>
+                <field name="snapshot_date"/>
+                <field name="snapshot_type"/>
+                <field name="state"/>
+                <field name="analysis_source"/>
+
+                <filter string="High Revenue Risk" name="high_revenue_risk"
+                        domain="[('total_revenue_risk', '&gt;=', 10000)]"/>
+                <filter string="Medium Revenue Risk" name="medium_revenue_risk"
+                        domain="[('total_revenue_risk', '&gt;=', 5000), ('total_revenue_risk', '&lt;', 10000)]"/>
+
+                <separator/>
+
+                <filter string="Manual Snapshot" name="manual" domain="[('snapshot_type', '=', 'manual')]"/>
+                <filter string="System Snapshot" name="system" domain="[('snapshot_type', '=', 'system')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+
+                <separator/>
+
+                <filter string="Generated" name="source_generated" domain="[('analysis_source', '=', 'generated')]"/>
+                <filter string="Manual Source" name="source_manual" domain="[('analysis_source', '=', 'manual')]"/>
+                <filter string="Generated High Risk" name="generated_high_risk"
+                        domain="[('analysis_source', '=', 'generated'), ('total_revenue_risk', '&gt;=', 10000)]"/>
+
+                <separator/>
+
+                <filter string="Recently Generated" name="recently_generated"
+                        domain="[('analysis_run_date', '!=', False)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Snapshot Type" name="group_snapshot_type" context="{'group_by': 'snapshot_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Snapshot Date" name="group_snapshot_date" context="{'group_by': 'snapshot_date'}"/>
+                    <filter string="Analysis Source" name="group_analysis_source" context="{'group_by': 'analysis_source'}"/>
+                    <filter string="Analysis Run Date" name="group_analysis_run_date" context="{'group_by': 'analysis_run_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_revivaiq_analytics_snapshot" model="ir.actions.act_window">
+        <field name="name">Analytics Snapshots</field>
+        <field name="res_model">revivaiq.analytics.snapshot</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_revivaiq_analytics_snapshot_search"/>
+    </record>
+</odoo>
