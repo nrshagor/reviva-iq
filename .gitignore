@@ -23,3 +23,6 @@ postgres_data/
 # OS
 .DS_Store
 Thumbs.db
+
+#Zip
+*.zip
